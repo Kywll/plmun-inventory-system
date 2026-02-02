@@ -89,7 +89,7 @@ include_once("../includes/header.php");
             <div class="row g-3">
                 <div class="col-md-9">
                     <div class="card shadow-sm p-3 text-center" style="height: 150px;">
-                        <h5 class="text-success fw-bold text-start">Urgent Request</h5>
+                        <h5 class="text-success fw-bold text-start">Activity Logs</h5>
                     </div>
                 </div>
                 <div class="col-md-3">

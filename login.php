@@ -52,7 +52,7 @@
           </div>
 
           <p class="text-center mt-3">
-            Back to Home Page <a href="index.php" class="text-success">Home Page</a>
+            Back to <a href="index.php" class="text-success">Home Page</a>
           </p>
         </form>
       </div>
