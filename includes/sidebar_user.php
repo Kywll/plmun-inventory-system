@@ -74,7 +74,7 @@
         </li>
 
         <li class="nav-item">
-          <a href="user_inventory.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'user)inventory.php') ? 'active' : ''; ?>">
+          <a href="user_inventory.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'user_inventory.php') ? 'active' : ''; ?>">
             <i class="bi bi-box-seam-fill me-2"></i> Inventory
           </a>
         </li>

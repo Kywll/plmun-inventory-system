@@ -86,7 +86,7 @@
         </li>
 
         <li class="nav-item">
-          <a href="admin_users.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'users.php') ? 'active' : ''; ?>">
+          <a href="admin_users.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_users.php') ? 'active' : ''; ?>">
             <i class="bi bi-people-fill me-2"></i> Users
           </a>
         </li>
