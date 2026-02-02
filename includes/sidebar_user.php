@@ -62,38 +62,38 @@
       <!-- MENU -->
       <ul class="nav nav-pills flex-column gap-2">
         <li class="nav-item">
-          <a href="admin_dashboard.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_dashboard.php') ? 'active' : ''; ?>">
+          <a href="user_dashboard.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'user_dashboard.php') ? 'active' : ''; ?>">
             <i class="bi bi-speedometer2 me-2"></i> Dashboard
           </a>
         </li>
 
         <li class="nav-item">
-          <a href="admin_requests.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_requests.php') ? 'active' : ''; ?>">
+          <a href="user_requests.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'user_requests.php') ? 'active' : ''; ?>">
             <i class="bi bi-clipboard-check-fill me-2"></i> My Request
           </a>
         </li>
 
         <li class="nav-item">
-          <a href="inventory.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'inventory.php') ? 'active' : ''; ?>">
+          <a href="user_inventory.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'user)inventory.php') ? 'active' : ''; ?>">
             <i class="bi bi-box-seam-fill me-2"></i> Inventory
           </a>
         </li>
 
         <li class="nav-item">
-          <a href="reports.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'active' : ''; ?>">
+          <a href="user_reports.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'user_reports.php') ? 'active' : ''; ?>">
             <i class="bi bi-file-earmark-bar-graph-fill me-2"></i>My Reports
           </a>
         </li>
 
 
         <li class="nav-item">
-          <a href="activity_logs.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'activity_logs.php') ? 'active' : ''; ?>">
+          <a href="user_logs.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'user_logs.php') ? 'active' : ''; ?>">
             <i class="bi bi-clock-history me-2"></i> Activity Logs
           </a>
         </li>
 
         <li class="nav-item">
-          <a href="settings.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'settings.php') ? 'active' : ''; ?>">
+          <a href="user_settings.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'user_settings.php') ? 'active' : ''; ?>">
             <i class="bi bi-sliders me-2"></i> Settings
           </a>
         </li>

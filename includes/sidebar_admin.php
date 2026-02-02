@@ -74,31 +74,31 @@
         </li>
 
         <li class="nav-item">
-          <a href="inventory.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'inventory.php') ? 'active' : ''; ?>">
+          <a href="admin_inventory.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_inventory.php') ? 'active' : ''; ?>">
             <i class="bi bi-box-seam-fill me-2"></i> Inventory
           </a>
         </li>
 
         <li class="nav-item">
-          <a href="reports.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'reports.php') ? 'active' : ''; ?>">
+          <a href="admin_reports.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_reports.php') ? 'active' : ''; ?>">
             <i class="bi bi-file-earmark-bar-graph-fill me-2"></i> Reports
           </a>
         </li>
 
         <li class="nav-item">
-          <a href="users.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'users.php') ? 'active' : ''; ?>">
+          <a href="admin_users.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'users.php') ? 'active' : ''; ?>">
             <i class="bi bi-people-fill me-2"></i> Users
           </a>
         </li>
 
         <li class="nav-item">
-          <a href="activity_logs.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'activity_logs.php') ? 'active' : ''; ?>">
+          <a href="admin_logs.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_logs.php') ? 'active' : ''; ?>">
             <i class="bi bi-clock-history me-2"></i> Activity Logs
           </a>
         </li>
 
         <li class="nav-item">
-          <a href="settings.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'settings.php') ? 'active' : ''; ?>">
+          <a href="admin_settings.php" class="nav-link text-white sidebar-link <?php echo (basename($_SERVER['PHP_SELF']) == 'admin_settings.php') ? 'active' : ''; ?>">
             <i class="bi bi-sliders me-2"></i> Settings
           </a>
         </li>
