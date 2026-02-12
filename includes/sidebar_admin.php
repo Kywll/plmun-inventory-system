@@ -104,7 +104,7 @@
         </li>
 
         <li class="nav-item mt-auto">
-          <a href="logout.php" class="nav-link text-white sidebar-link  ">
+          <a href="../logout.php" class="nav-link text-white sidebar-link">
             <i class="bi bi-box-arrow-right me-2"></i> Logout
           </a>
         </li>
