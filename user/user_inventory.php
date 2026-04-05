@@ -166,6 +166,48 @@ while ($row = $supResult->fetch_assoc()) {
 
 <main class="flex-grow-1 p-4" style="margin-left: 250px; height: 100vh; overflow-y: auto;">
 <h2 class="mb-4 text-success fw-bold">Inventory</h2>
+<div class="container mb-4">
+<div class="card shadow-sm p-3">
+<h5 class="text-success fw-bold mb-3">Filter / Search Inventory</h5>
+<form method="GET" class="row g-3 align-items-center">
+
+<div class="col-md-4">
+<input type="text" name="search" class="form-control"
+placeholder="Search by Item Name"
+value="<?php echo htmlspecialchars($search); ?>">
+</div>
+
+<div class="col-md-4">
+<select name="category" class="form-select">
+<option value="">Category</option>
+<?php foreach ($categories as $cat): ?>
+<option value="<?php echo htmlspecialchars($cat); ?>"
+<?php if ($category === $cat) echo "selected"; ?>>
+<?php echo htmlspecialchars($cat); ?>
+</option>
+<?php endforeach; ?>
+</select>
+</div>
+
+<div class="col-md-3">
+<select name="supplier" class="form-select">
+<option value="">Supplier</option>
+<?php foreach ($suppliers as $sup): ?>
+<option value="<?php echo htmlspecialchars($sup); ?>"
+<?php if ($supplier === $sup) echo "selected"; ?>>
+<?php echo htmlspecialchars($sup); ?>
+</option>
+<?php endforeach; ?>
+</select>
+</div>
+
+<div class="col-md-1">
+<button type="submit" class="btn btn-success w-100"><i class="bi bi-search"></i></button>
+</div>
+
+</form>
+</div>
+</div>
 
 <!-- TABLE -->
 <div class="container mb-4">
@@ -231,48 +273,6 @@ if ($item['stock'] <= 0) {
 </div>
 </div>
 
-<div class="container mb-4">
-<div class="card shadow-sm p-3">
-<h5 class="text-success fw-bold mb-3">Filter / Search Inventory</h5>
-<form method="GET" class="row g-3 align-items-center">
-
-<div class="col-md-4">
-<input type="text" name="search" class="form-control"
-placeholder="Search by Item Name"
-value="<?php echo htmlspecialchars($search); ?>">
-</div>
-
-<div class="col-md-4">
-<select name="category" class="form-select">
-<option value="">Category</option>
-<?php foreach ($categories as $cat): ?>
-<option value="<?php echo htmlspecialchars($cat); ?>"
-<?php if ($category === $cat) echo "selected"; ?>>
-<?php echo htmlspecialchars($cat); ?>
-</option>
-<?php endforeach; ?>
-</select>
-</div>
-
-<div class="col-md-3">
-<select name="supplier" class="form-select">
-<option value="">Supplier</option>
-<?php foreach ($suppliers as $sup): ?>
-<option value="<?php echo htmlspecialchars($sup); ?>"
-<?php if ($supplier === $sup) echo "selected"; ?>>
-<?php echo htmlspecialchars($sup); ?>
-</option>
-<?php endforeach; ?>
-</select>
-</div>
-
-<div class="col-md-1">
-<button type="submit" class="btn btn-success w-100"><i class="bi bi-search"></i></button>
-</div>
-
-</form>
-</div>
-</div>
 
 </main>
 </div>

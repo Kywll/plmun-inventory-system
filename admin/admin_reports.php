@@ -326,6 +326,8 @@ $result = $stmt->get_result();
 <main class="flex-grow-1 p-4" style="margin-left: 250px; height: 100vh; overflow-y: auto;">
 <h2 class="mb-4 text-success fw-bold">Request Reports</h2>
 
+
+
 <!-- SUMMARY -->
 <div class="container mb-4">
 <div class="row g-3">
@@ -336,49 +338,6 @@ $result = $stmt->get_result();
 </div>
 </div>
 
-<!-- TABLE -->
-<div class="container mb-4">
-<div class="card shadow-sm p-3">
-<h5>Reports</h5>
-
-<div style="max-height: 400px; overflow-y: auto;">
-<table class="table table-bordered text-center align-middle">
-<thead class="table-success" style="position: sticky; top: 0; z-index: 1;">
-<tr>
-<th>#</th>
-<th>User</th>
-<th>Item</th>
-<th>Qty</th>
-<th>Dept</th>
-<th>Status</th>
-<th>Date</th>
-</tr>
-</thead>
-<tbody>
-
-<?php $count=1; while ($row = $result->fetch_assoc()): ?>
-<tr>
-<td><?php echo $count++; ?></td>
-<td><?php echo $row['first_name']." ".$row['last_name']; ?></td>
-<td><?php echo $row['item_name']; ?></td>
-<td><?php echo $row['quantity']; ?></td>
-<td><?php echo $row['department']; ?></td>
-<td><?php echo $row['status']; ?></td>
-<td><?php echo $row['request_date']; ?></td>
-</tr>
-<?php endwhile; ?>
-
-<?php if ($result->num_rows === 0): ?>
-<tr><td colspan="7">No data found</td></tr>
-<?php endif; ?>
-
-</tbody>
-</table>
-</div>
-</div>
-</div>
-
-<!-- FILTER + EXPORT -->
 <div class="container mb-4">
 <div class="row g-3">
 
@@ -426,6 +385,51 @@ Export CSV
 
 </div>
 </div>
+
+
+<!-- TABLE -->
+<div class="container mb-4">
+<div class="card shadow-sm p-3">
+<h5>Reports</h5>
+
+<div style="max-height: 400px; overflow-y: auto;">
+<table class="table table-bordered text-center align-middle">
+<thead class="table-success" style="position: sticky; top: 0; z-index: 1;">
+<tr>
+<th>#</th>
+<th>User</th>
+<th>Item</th>
+<th>Qty</th>
+<th>Dept</th>
+<th>Status</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody>
+
+<?php $count=1; while ($row = $result->fetch_assoc()): ?>
+<tr>
+<td><?php echo $count++; ?></td>
+<td><?php echo $row['first_name']." ".$row['last_name']; ?></td>
+<td><?php echo $row['item_name']; ?></td>
+<td><?php echo $row['quantity']; ?></td>
+<td><?php echo $row['department']; ?></td>
+<td><?php echo $row['status']; ?></td>
+<td><?php echo $row['request_date']; ?></td>
+</tr>
+<?php endwhile; ?>
+
+<?php if ($result->num_rows === 0): ?>
+<tr><td colspan="7">No data found</td></tr>
+<?php endif; ?>
+
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<!-- FILTER + EXPORT -->
 
 </main>
 </div>

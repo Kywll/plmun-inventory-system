@@ -184,6 +184,49 @@ $result = $stmt->get_result();
 <div class="container mb-4">
 <div class="row g-3">
 
+<div class="col-md-8">
+<div class="card shadow-sm p-3" style="height: 200px;">
+<h5 class="text-success fw-bold mb-3">Filter Activities</h5>
+
+<form method="GET" class="row g-3 align-items-center">
+<div class="col-md-4">
+<input type="date" name="start_date" class="form-control"
+value="<?php echo htmlspecialchars($startDate); ?>">
+</div>
+<div class="col-md-4">
+<input type="date" name="end_date" class="form-control"
+value="<?php echo htmlspecialchars($endDate); ?>">
+</div>
+<div class="col-md-4">
+<select name="activity_type" class="form-select">
+<option value="">Activity Type</option>
+<option value="Login" <?php if($activityType == 'Login') echo 'selected'; ?>>Login</option>
+<option value="Edit" <?php if($activityType == 'Edit') echo 'selected'; ?>>Edit / Update</option>
+<option value="Approval" <?php if($activityType == 'Approval') echo 'selected'; ?>>Approval</option>
+<option value="Deletion" <?php if($activityType == 'Deletion') echo 'selected'; ?>>Deletion</option>
+<option value="Item" <?php if($activityType == 'Item') echo 'selected'; ?>>Item</option>
+<option value="Request" <?php if($activityType == 'Request') echo 'selected'; ?>>Request</option>
+</select>
+</div>
+<div class="col-md-12">
+<button type="submit" class="btn btn-success w-100">Apply Filter</button>
+</div>
+</form>
+
+</div>
+</div>
+
+<!-- Export Reports -->
+<div class="col-md-4">
+<div class="card shadow-sm p-3 text-center" style="height: 200px;">
+<h5 class="text-success fw-bold mb-3">Export Reports</h5>
+<a href="?export=pdf&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>&activity_type=<?php echo urlencode($activityType); ?>" class="btn btn-danger m-1 w-100 btn-sm">Export PDF</a>
+<a href="?export=excel&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>&activity_type=<?php echo urlencode($activityType); ?>" class="btn btn-success m-1 w-100 btn-sm">Export Excel</a>
+<a href="?export=csv&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>&activity_type=<?php echo urlencode($activityType); ?>" class="btn btn-primary m-1 w-100 btn-sm">Export CSV</a>
+</div>
+</div>
+
+
 <!-- Activity Logs Table -->
 <div class="col-md-12">
 <div class="card shadow-sm p-3">
@@ -228,47 +271,6 @@ while ($row = $result->fetch_assoc()):
 </div>
 
 <!-- Filter Activities -->
-<div class="col-md-8">
-<div class="card shadow-sm p-3" style="height: 200px;">
-<h5 class="text-success fw-bold mb-3">Filter Activities</h5>
-
-<form method="GET" class="row g-3 align-items-center">
-<div class="col-md-4">
-<input type="date" name="start_date" class="form-control"
-value="<?php echo htmlspecialchars($startDate); ?>">
-</div>
-<div class="col-md-4">
-<input type="date" name="end_date" class="form-control"
-value="<?php echo htmlspecialchars($endDate); ?>">
-</div>
-<div class="col-md-4">
-<select name="activity_type" class="form-select">
-<option value="">Activity Type</option>
-<option value="Login" <?php if($activityType == 'Login') echo 'selected'; ?>>Login</option>
-<option value="Edit" <?php if($activityType == 'Edit') echo 'selected'; ?>>Edit / Update</option>
-<option value="Approval" <?php if($activityType == 'Approval') echo 'selected'; ?>>Approval</option>
-<option value="Deletion" <?php if($activityType == 'Deletion') echo 'selected'; ?>>Deletion</option>
-<option value="Item" <?php if($activityType == 'Item') echo 'selected'; ?>>Item</option>
-<option value="Request" <?php if($activityType == 'Request') echo 'selected'; ?>>Request</option>
-</select>
-</div>
-<div class="col-md-12">
-<button type="submit" class="btn btn-success w-100">Apply Filter</button>
-</div>
-</form>
-
-</div>
-</div>
-
-<!-- Export Reports -->
-<div class="col-md-4">
-<div class="card shadow-sm p-3 text-center" style="height: 200px;">
-<h5 class="text-success fw-bold mb-3">Export Reports</h5>
-<a href="?export=pdf&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>&activity_type=<?php echo urlencode($activityType); ?>" class="btn btn-danger m-1 w-100 btn-sm">Export PDF</a>
-<a href="?export=excel&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>&activity_type=<?php echo urlencode($activityType); ?>" class="btn btn-success m-1 w-100 btn-sm">Export Excel</a>
-<a href="?export=csv&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>&activity_type=<?php echo urlencode($activityType); ?>" class="btn btn-primary m-1 w-100 btn-sm">Export CSV</a>
-</div>
-</div>
 
 </div>
 </div>

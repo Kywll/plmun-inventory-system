@@ -196,6 +196,31 @@ $result = $stmt->get_result();
 
 <div class="container mb-4">
 <div class="card shadow-sm p-3">
+<h5 class="text-success fw-bold mb-3">Filter Requests</h5>
+<form method="GET" class="row g-3 align-items-center">
+<div class="col-md-3">
+<select name="status" class="form-select">
+<option value="">Status</option>
+<option value="Pending" <?php if($statusFilter == 'Pending') echo 'selected'; ?>>Pending</option>
+<option value="Approved" <?php if($statusFilter == 'Approved') echo 'selected'; ?>>Approved</option>
+<option value="Declined" <?php if($statusFilter == 'Declined') echo 'selected'; ?>>Declined</option>
+</select>
+</div>
+<div class="col-md-3">
+<input type="text" name="department" class="form-control" placeholder="Department" value="<?php echo htmlspecialchars($departmentFilter); ?>">
+</div>
+<div class="col-md-3">
+<input type="date" name="date" class="form-control" value="<?php echo htmlspecialchars($dateFilter); ?>">
+</div>
+<div class="col-md-3">
+<button type="submit" class="btn btn-success w-100">Apply Filter</button>
+</div>
+</form>
+</div>
+</div>
+
+<div class="container mb-4">
+<div class="card shadow-sm p-3">
 <h5 class="text-success fw-bold mb-3">Incoming Requests</h5>
 
 <div style="max-height: 400px; overflow-y: auto;">
@@ -264,30 +289,7 @@ while ($row = $result->fetch_assoc()):
 </div>
 </div>
 
-<div class="container mb-4">
-<div class="card shadow-sm p-3">
-<h5 class="text-success fw-bold mb-3">Filter Requests</h5>
-<form method="GET" class="row g-3 align-items-center">
-<div class="col-md-3">
-<select name="status" class="form-select">
-<option value="">Status</option>
-<option value="Pending" <?php if($statusFilter == 'Pending') echo 'selected'; ?>>Pending</option>
-<option value="Approved" <?php if($statusFilter == 'Approved') echo 'selected'; ?>>Approved</option>
-<option value="Declined" <?php if($statusFilter == 'Declined') echo 'selected'; ?>>Declined</option>
-</select>
-</div>
-<div class="col-md-3">
-<input type="text" name="department" class="form-control" placeholder="Department" value="<?php echo htmlspecialchars($departmentFilter); ?>">
-</div>
-<div class="col-md-3">
-<input type="date" name="date" class="form-control" value="<?php echo htmlspecialchars($dateFilter); ?>">
-</div>
-<div class="col-md-3">
-<button type="submit" class="btn btn-success w-100">Apply Filter</button>
-</div>
-</form>
-</div>
-</div>
+
 
 </main>
 </div>

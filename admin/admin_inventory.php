@@ -210,6 +210,64 @@ $items = $stmt->get_result();
 <main class="flex-grow-1 p-4" style="margin-left: 250px; height: 100vh; overflow-y: auto;">
 <h2 class="mb-4 text-success fw-bold">Inventory Management</h2>
 
+<div class="container mb-4">
+<div class="card shadow-sm p-3">
+<h5 class="text-success fw-bold mb-3">Add New Item</h5>
+<form method="POST" class="row g-3 align-items-center">
+<div class="col-md-3">
+<input type="text" name="item_name" class="form-control" placeholder="Item Name" required>
+</div>
+<div class="col-md-3">
+<input type="text" name="category" class="form-control" placeholder="Category" required>
+</div>
+<div class="col-md-3">
+<input type="text" name="supplier" class="form-control" placeholder="Supplier" required>
+</div>
+<div class="col-md-2">
+<input type="number" name="quantity" class="form-control" placeholder="Initial Stock" required>
+</div>
+<div class="col-md-1">
+<button type="submit" name="add_item" class="btn btn-success w-100">Add</button>
+</div>
+</form>
+</div>
+</div>
+
+<div class="container mb-4">
+<div class="card shadow-sm p-3">
+<h5 class="text-success fw-bold mb-3">Filter Inventory</h5>
+<form method="GET" class="row g-3 align-items-center">
+<div class="col-md-3">
+<input type="text" name="search" class="form-control" placeholder="Search item or supplier" value="<?php echo htmlspecialchars($search); ?>">
+</div>
+<div class="col-md-3">
+<select name="category" class="form-select">
+<option value="">Category</option>
+<?php
+$catRes = $conn->query("SELECT DISTINCT category FROM items");
+while($cat = $catRes->fetch_assoc()) {
+    $selected = ($category == $cat['category']) ? 'selected' : '';
+    echo "<option value='".htmlspecialchars($cat['category'])."' $selected>".htmlspecialchars($cat['category'])."</option>";
+}
+?>
+</select>
+</div>
+<div class="col-md-3">
+<select name="status" class="form-select">
+<option value="">Status</option>
+<option value="Active" <?php echo ($status == 'Active') ? 'selected' : ''; ?>>Active</option>
+<option value="Low Stock" <?php echo ($status == 'Low Stock') ? 'selected' : ''; ?>>Low Stock</option>
+<option value="Out of Stock" <?php echo ($status == 'Out of Stock') ? 'selected' : ''; ?>>Out of Stock</option>
+<option value="Inactive" <?php echo ($status == 'Inactive') ? 'selected' : ''; ?>>Inactive</option>
+</select>
+</div>
+<div class="col-md-3">
+<button type="submit" class="btn btn-success w-100">Apply Filter</button>
+</div>
+</form>
+</div>
+</div>
+
 <!-- TABLE -->
 <div class="container mb-4">
 <div class="row g-3">
@@ -296,63 +354,7 @@ $items = $stmt->get_result();
 </div>
 </div>
 
-<div class="container mb-4">
-<div class="card shadow-sm p-3">
-<h5 class="text-success fw-bold mb-3">Add New Item</h5>
-<form method="POST" class="row g-3 align-items-center">
-<div class="col-md-3">
-<input type="text" name="item_name" class="form-control" placeholder="Item Name" required>
-</div>
-<div class="col-md-3">
-<input type="text" name="category" class="form-control" placeholder="Category" required>
-</div>
-<div class="col-md-3">
-<input type="text" name="supplier" class="form-control" placeholder="Supplier" required>
-</div>
-<div class="col-md-2">
-<input type="number" name="quantity" class="form-control" placeholder="Initial Stock" required>
-</div>
-<div class="col-md-1">
-<button type="submit" name="add_item" class="btn btn-success w-100">Add</button>
-</div>
-</form>
-</div>
-</div>
 
-<div class="container mb-4">
-<div class="card shadow-sm p-3">
-<h5 class="text-success fw-bold mb-3">Filter Inventory</h5>
-<form method="GET" class="row g-3 align-items-center">
-<div class="col-md-3">
-<input type="text" name="search" class="form-control" placeholder="Search item or supplier" value="<?php echo htmlspecialchars($search); ?>">
-</div>
-<div class="col-md-3">
-<select name="category" class="form-select">
-<option value="">Category</option>
-<?php
-$catRes = $conn->query("SELECT DISTINCT category FROM items");
-while($cat = $catRes->fetch_assoc()) {
-    $selected = ($category == $cat['category']) ? 'selected' : '';
-    echo "<option value='".htmlspecialchars($cat['category'])."' $selected>".htmlspecialchars($cat['category'])."</option>";
-}
-?>
-</select>
-</div>
-<div class="col-md-3">
-<select name="status" class="form-select">
-<option value="">Status</option>
-<option value="Active" <?php echo ($status == 'Active') ? 'selected' : ''; ?>>Active</option>
-<option value="Low Stock" <?php echo ($status == 'Low Stock') ? 'selected' : ''; ?>>Low Stock</option>
-<option value="Out of Stock" <?php echo ($status == 'Out of Stock') ? 'selected' : ''; ?>>Out of Stock</option>
-<option value="Inactive" <?php echo ($status == 'Inactive') ? 'selected' : ''; ?>>Inactive</option>
-</select>
-</div>
-<div class="col-md-3">
-<button type="submit" class="btn btn-success w-100">Apply Filter</button>
-</div>
-</form>
-</div>
-</div>
 
 </main>
 </div>

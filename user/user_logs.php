@@ -114,6 +114,32 @@ $logsQuery->close();
 
 <div class="container mb-4">
 <div class="card shadow-sm p-3">
+<h5 class="text-success fw-bold mb-3">Filter Activities</h5>
+<form method="GET" class="row g-3 align-items-center">
+<div class="col-md-4">
+<input type="date" name="start_date" class="form-control" value="<?php echo htmlspecialchars($startDate); ?>">
+</div>
+<div class="col-md-4">
+<input type="date" name="end_date" class="form-control" value="<?php echo htmlspecialchars($endDate); ?>">
+</div>
+<div class="col-md-4">
+<select name="activity_type" class="form-select">
+<option value="">Activity Type</option>
+<option value="Login" <?php if($activityType == 'Login') echo 'selected'; ?>>Login</option>
+<option value="Requested" <?php if($activityType == 'Requested') echo 'selected'; ?>>Request Submitted</option>
+<option value="Cancelled" <?php if($activityType == 'Cancelled') echo 'selected'; ?>>Request Cancelled</option>
+<option value="Password" <?php if($activityType == 'Password') echo 'selected'; ?>>Password Change</option>
+</select>
+</div>
+<div class="col-md-12 mt-3">
+<button type="submit" class="btn btn-success w-100">Apply Filter</button>
+</div>
+</form>
+</div>
+</div>
+
+<div class="container mb-4">
+<div class="card shadow-sm p-3">
 <h5 class="text-success fw-bold mb-3">Activity History</h5>
 
 <div style="max-height: 400px; overflow-y: auto;">
@@ -162,31 +188,7 @@ if (strpos($log['action'], 'Approved') !== false) {
 </div>
 </div>
 
-<div class="container mb-4">
-<div class="card shadow-sm p-3">
-<h5 class="text-success fw-bold mb-3">Filter Activities</h5>
-<form method="GET" class="row g-3 align-items-center">
-<div class="col-md-4">
-<input type="date" name="start_date" class="form-control" value="<?php echo htmlspecialchars($startDate); ?>">
-</div>
-<div class="col-md-4">
-<input type="date" name="end_date" class="form-control" value="<?php echo htmlspecialchars($endDate); ?>">
-</div>
-<div class="col-md-4">
-<select name="activity_type" class="form-select">
-<option value="">Activity Type</option>
-<option value="Login" <?php if($activityType == 'Login') echo 'selected'; ?>>Login</option>
-<option value="Requested" <?php if($activityType == 'Requested') echo 'selected'; ?>>Request Submitted</option>
-<option value="Cancelled" <?php if($activityType == 'Cancelled') echo 'selected'; ?>>Request Cancelled</option>
-<option value="Password" <?php if($activityType == 'Password') echo 'selected'; ?>>Password Change</option>
-</select>
-</div>
-<div class="col-md-12 mt-3">
-<button type="submit" class="btn btn-success w-100">Apply Filter</button>
-</div>
-</form>
-</div>
-</div>
+
 
 </main>
 </div>

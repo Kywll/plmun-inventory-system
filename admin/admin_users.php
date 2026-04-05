@@ -232,6 +232,41 @@ $recent_users = $conn->query("SELECT COUNT(*) as total FROM users WHERE date_cre
 </div>
 </div>
 
+<!-- FILTER -->
+<div class="container mb-4">
+<div class="card shadow-sm p-3">
+<h5 class="text-success fw-bold mb-3">Filter Users</h5>
+<form method="GET" class="row g-3 align-items-center">
+<div class="col-md-4">
+<input type="text" name="search" class="form-control" placeholder="Search name or email" value="<?php echo htmlspecialchars($search); ?>">
+</div>
+<div class="col-md-3">
+<select name="department" class="form-select">
+<option value="">Department</option>
+<?php
+$deptRes = $conn->query("SELECT DISTINCT department FROM users");
+while($dept = $deptRes->fetch_assoc()) {
+    $selected = ($deptFilter == $dept['department']) ? 'selected' : '';
+    echo "<option value='".htmlspecialchars($dept['department'])."' $selected>".htmlspecialchars($dept['department'])."</option>";
+}
+?>
+</select>
+</div>
+<div class="col-md-3">
+<select name="status" class="form-select">
+<option value="">Status</option>
+<option value="Active" <?php echo ($statusFilter == 'Active') ? 'selected' : ''; ?>>Active</option>
+<option value="Inactive" <?php echo ($statusFilter == 'Inactive') ? 'selected' : ''; ?>>Inactive</option>
+</select>
+</div>
+<div class="col-md-2">
+<button type="submit" class="btn btn-success w-100">Apply Filter</button>
+</div>
+</form>
+</div>
+</div>
+
+
 <!-- USER TABLE -->
 <div class="container mb-4">
 <div class="row g-3">
@@ -311,39 +346,6 @@ Update
 </div>
 </div>
 
-<!-- FILTER -->
-<div class="container mb-4">
-<div class="card shadow-sm p-3">
-<h5 class="text-success fw-bold mb-3">Filter Users</h5>
-<form method="GET" class="row g-3 align-items-center">
-<div class="col-md-4">
-<input type="text" name="search" class="form-control" placeholder="Search name or email" value="<?php echo htmlspecialchars($search); ?>">
-</div>
-<div class="col-md-3">
-<select name="department" class="form-select">
-<option value="">Department</option>
-<?php
-$deptRes = $conn->query("SELECT DISTINCT department FROM users");
-while($dept = $deptRes->fetch_assoc()) {
-    $selected = ($deptFilter == $dept['department']) ? 'selected' : '';
-    echo "<option value='".htmlspecialchars($dept['department'])."' $selected>".htmlspecialchars($dept['department'])."</option>";
-}
-?>
-</select>
-</div>
-<div class="col-md-3">
-<select name="status" class="form-select">
-<option value="">Status</option>
-<option value="Active" <?php echo ($statusFilter == 'Active') ? 'selected' : ''; ?>>Active</option>
-<option value="Inactive" <?php echo ($statusFilter == 'Inactive') ? 'selected' : ''; ?>>Inactive</option>
-</select>
-</div>
-<div class="col-md-2">
-<button type="submit" class="btn btn-success w-100">Apply Filter</button>
-</div>
-</form>
-</div>
-</div>
 
 </main>
 </div>

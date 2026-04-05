@@ -238,12 +238,48 @@ $result = $stmt->get_result();
 <main class="flex-grow-1 p-4" style="margin-left: 250px; height: 100vh; overflow-y: auto;">
 <h2 class="mb-4 text-success fw-bold">My Reports</h2>
 
+
 <div class="container mb-4">
 <div class="row g-3">
 <div class="col-md-3"><div class="card shadow-sm p-3 text-center"><h5 class="text-success fw-bold">Total</h5><h3><?php echo $total; ?></h3></div></div>
 <div class="col-md-3"><div class="card shadow-sm p-3 text-center"><h5 class="text-success fw-bold">Pending</h5><h3><?php echo $pending; ?></h3></div></div>
 <div class="col-md-3"><div class="card shadow-sm p-3 text-center"><h5 class="text-success fw-bold">Approved</h5><h3><?php echo $approved; ?></h3></div></div>
 <div class="col-md-3"><div class="card shadow-sm p-3 text-center"><h5 class="text-success fw-bold">Declined</h5><h3><?php echo $declined; ?></h3></div></div>
+</div>
+</div>
+
+<!-- FILTER + EXPORT -->
+<div class="container mb-4">
+<div class="row g-3">
+
+<div class="col-md-8">
+<div class="card shadow-sm p-3" style="height: 200px;">
+<h5 class="text-success fw-bold mb-3">Filter Reports</h5>
+<form method="GET">
+<div class="row">
+<div class="col-md-6">
+<input type="date" name="start_date" value="<?php echo $startDate; ?>" class="form-control mb-2">
+</div>
+<div class="col-md-6">
+<input type="date" name="end_date" value="<?php echo $endDate; ?>" class="form-control mb-2">
+</div>
+</div>
+<button class="btn btn-success w-100 mt-2">Apply Filter</button>
+</form>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card shadow-sm p-3 text-center" style="height: 200px;">
+<h5 class="text-success fw-bold mb-3">Export Reports</h5>
+
+<a href="?export=pdf&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>" class="btn btn-danger w-100 mb-2 btn-sm">Export PDF</a>
+<a href="?export=excel&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>" class="btn btn-success w-100 mb-2 btn-sm">Export Excel</a>
+<a href="?export=csv&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>" class="btn btn-primary w-100 btn-sm">Export CSV</a>
+
+</div>
+</div>
+
 </div>
 </div>
 
@@ -284,40 +320,7 @@ $result = $stmt->get_result();
 </div>
 </div>
 
-<!-- FILTER + EXPORT -->
-<div class="container mb-4">
-<div class="row g-3">
 
-<div class="col-md-8">
-<div class="card shadow-sm p-3" style="height: 200px;">
-<h5 class="text-success fw-bold mb-3">Filter Reports</h5>
-<form method="GET">
-<div class="row">
-<div class="col-md-6">
-<input type="date" name="start_date" value="<?php echo $startDate; ?>" class="form-control mb-2">
-</div>
-<div class="col-md-6">
-<input type="date" name="end_date" value="<?php echo $endDate; ?>" class="form-control mb-2">
-</div>
-</div>
-<button class="btn btn-success w-100 mt-2">Apply Filter</button>
-</form>
-</div>
-</div>
-
-<div class="col-md-4">
-<div class="card shadow-sm p-3 text-center" style="height: 200px;">
-<h5 class="text-success fw-bold mb-3">Export Reports</h5>
-
-<a href="?export=pdf&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>" class="btn btn-danger w-100 mb-2 btn-sm">Export PDF</a>
-<a href="?export=excel&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>" class="btn btn-success w-100 mb-2 btn-sm">Export Excel</a>
-<a href="?export=csv&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>" class="btn btn-primary w-100 btn-sm">Export CSV</a>
-
-</div>
-</div>
-
-</div>
-</div>
 
 </main>
 </div>
