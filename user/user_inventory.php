@@ -49,6 +49,85 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     }
 }
 
+// ================= EXPORT LOGIC =================
+if (isset($_GET['export'])) {
+    $exportType = $_GET['export'];
+    
+    // Re-run the filtered query for export
+    $exportQuery = "SELECT * FROM items $where ORDER BY item_name ASC";
+    $stmtExport = $conn->prepare($exportQuery);
+    if (!empty($params)) {
+        $stmtExport->bind_param($types, ...$params);
+    }
+    $stmtExport->execute();
+    $exportResult = $stmtExport->get_result();
+
+    if ($exportType === 'csv') {
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment; filename="user_inventory.csv"');
+        $output = fopen("php://output", "w");
+        fputcsv($output, ['Item Name', 'Category', 'Supplier', 'Stock', 'Status']);
+        while ($row = $exportResult->fetch_assoc()) {
+            $status = ($row['stock'] <= 0) ? 'Out of Stock' : (($row['stock'] <= $row['low_stock_threshold']) ? 'Low Stock' : 'OK');
+            fputcsv($output, [$row['item_name'], $row['category'], $row['supplier_name'], $row['stock'], $status]);
+        }
+        fclose($output);
+        exit();
+    } elseif ($exportType === 'excel') {
+        header("Content-Type: application/vnd.ms-excel");
+        header("Content-Disposition: attachment; filename=\"user_inventory.xls\"");
+        echo "Item Name\tCategory\tSupplier\tStock\tStatus\n";
+        while ($row = $exportResult->fetch_assoc()) {
+            $status = ($row['stock'] <= 0) ? 'Out of Stock' : (($row['stock'] <= $row['low_stock_threshold']) ? 'Low Stock' : 'OK');
+            echo $row['item_name']."\t".$row['category']."\t".$row['supplier_name']."\t".$row['stock']."\t".$status."\n";
+        }
+        exit();
+    } elseif ($exportType === 'pdf') {
+        require_once('../tcpdf/tcpdf.php');
+        class MYPDF extends TCPDF {
+            public function Header() {
+                $this->SetFont('helvetica', 'B', 16);
+                $this->Cell(0, 15, 'PLMun Supply Inventory System', 0, 1, 'C');
+                $this->SetFont('helvetica', 'B', 12);
+                $this->Cell(0, 10, 'Available Inventory Report', 0, 1, 'C');
+                $this->Ln(5);
+            }
+            public function Footer() {
+                $this->SetY(-15);
+                $this->SetFont('helvetica', 'I', 8);
+                $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, 0, 'C');
+            }
+        }
+        $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetTitle('Inventory Report');
+        $pdf->SetMargins(15, 40, 15);
+        $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+        $pdf->AddPage();
+        $pdf->SetFont('helvetica', '', 10);
+        $html = '<p><strong>Generated on:</strong> '.date("Y-m-d H:i:s").'</p>
+        <table border="1" cellpadding="5">
+            <thead>
+                <tr style="background-color: #dff0d8; font-weight: bold;">
+                    <th width="30%">Item Name</th>
+                    <th width="20%">Category</th>
+                    <th width="25%">Supplier</th>
+                    <th width="10%">Stock</th>
+                    <th width="15%">Status</th>
+                </tr>
+            </thead>
+            <tbody>';
+        while ($row = $exportResult->fetch_assoc()) {
+            $status = ($row['stock'] <= 0) ? 'Out of Stock' : (($row['stock'] <= $row['low_stock_threshold']) ? 'Low Stock' : 'OK');
+            $html .= '<tr><td>'.$row['item_name'].'</td><td>'.$row['category'].'</td><td>'.$row['supplier_name'].'</td><td>'.$row['stock'].'</td><td>'.$status.'</td></tr>';
+        }
+        $html .= '</tbody></table>';
+        $pdf->writeHTML($html, true, false, true, false, '');
+        $pdf->Output('user_inventory.pdf', 'D');
+        exit();
+    }
+}
+
 // ================= FETCH INVENTORY =================
 $query = "SELECT * FROM items $where ORDER BY item_name ASC";
 $stmt = $conn->prepare($query);
@@ -85,54 +164,17 @@ while ($row = $supResult->fetch_assoc()) {
 <div class="d-flex">
 <?php include_once("../includes/sidebar_user.php"); ?>
 
-<main class="flex-grow-1 p-4" style="margin-left: 250px;">
+<main class="flex-grow-1 p-4" style="margin-left: 250px; height: 100vh; overflow-y: auto;">
 <h2 class="mb-4 text-success fw-bold">Inventory</h2>
 
 <div class="container mb-4">
-<div class="card shadow-sm p-3">
-<h5 class="text-success fw-bold mb-3">Filter / Search Inventory</h5>
-<form method="GET" class="row g-3 align-items-center">
-
-<div class="col-md-4">
-<input type="text" name="search" class="form-control"
-placeholder="Search by Item Name"
-value="<?php echo htmlspecialchars($search); ?>">
-</div>
-
-<div class="col-md-4">
-<select name="category" class="form-select">
-<option>Category</option>
-<?php foreach ($categories as $cat): ?>
-<option value="<?php echo htmlspecialchars($cat); ?>"
-<?php if ($category === $cat) echo "selected"; ?>>
-<?php echo htmlspecialchars($cat); ?>
-</option>
-<?php endforeach; ?>
-</select>
-</div>
-
-<div class="col-md-4">
-<select name="supplier" class="form-select">
-<option>Supplier</option>
-<?php foreach ($suppliers as $sup): ?>
-<option value="<?php echo htmlspecialchars($sup); ?>"
-<?php if ($supplier === $sup) echo "selected"; ?>>
-<?php echo htmlspecialchars($sup); ?>
-</option>
-<?php endforeach; ?>
-</select>
-</div>
-
-</form>
-</div>
-</div>
-
-<div class="container mb-4">
+<div class="row g-3">
+<div class="col-md-9">
 <div class="card shadow-sm p-3">
 <h5 class="text-success fw-bold mb-3">Available Items</h5>
-<div class="table-responsive">
+<div style="max-height: 400px; overflow-y: auto;">
 <table class="table table-bordered table-hover align-middle text-center">
-<thead class="table-success">
+<thead class="table-success" style="position: sticky; top: 0; z-index: 1;">
 <tr>
 <th>#</th>
 <th>Item Name</th>
@@ -175,7 +217,60 @@ if ($item['stock'] <= 0) {
 </div>
 </div>
 
+<div class="col-md-3">
+<div class="card shadow-sm p-3 text-center">
+<h5 class="text-success fw-bold mb-3">Export Inventory</h5>
+<a href="?export=pdf&search=<?php echo urlencode($search); ?>&category=<?php echo urlencode($category); ?>&supplier=<?php echo urlencode($supplier); ?>" class="btn btn-danger m-1 w-100">Export PDF</a>
+<a href="?export=excel&search=<?php echo urlencode($search); ?>&category=<?php echo urlencode($category); ?>&supplier=<?php echo urlencode($supplier); ?>" class="btn btn-success m-1 w-100">Export Excel</a>
+<a href="?export=csv&search=<?php echo urlencode($search); ?>&category=<?php echo urlencode($category); ?>&supplier=<?php echo urlencode($supplier); ?>" class="btn btn-primary m-1 w-100">Export CSV</a>
+</div>
+</div>
+</div>
+</div>
+
+<div class="container mb-4">
+<div class="card shadow-sm p-3">
+<h5 class="text-success fw-bold mb-3">Filter / Search Inventory</h5>
+<form method="GET" class="row g-3 align-items-center">
+
+<div class="col-md-4">
+<input type="text" name="search" class="form-control"
+placeholder="Search by Item Name"
+value="<?php echo htmlspecialchars($search); ?>">
+</div>
+
+<div class="col-md-4">
+<select name="category" class="form-select">
+<option value="">Category</option>
+<?php foreach ($categories as $cat): ?>
+<option value="<?php echo htmlspecialchars($cat); ?>"
+<?php if ($category === $cat) echo "selected"; ?>>
+<?php echo htmlspecialchars($cat); ?>
+</option>
+<?php endforeach; ?>
+</select>
+</div>
+
+<div class="col-md-3">
+<select name="supplier" class="form-select">
+<option value="">Supplier</option>
+<?php foreach ($suppliers as $sup): ?>
+<option value="<?php echo htmlspecialchars($sup); ?>"
+<?php if ($supplier === $sup) echo "selected"; ?>>
+<?php echo htmlspecialchars($sup); ?>
+</option>
+<?php endforeach; ?>
+</select>
+</div>
+
+<div class="col-md-1">
+<button type="submit" class="btn btn-success w-100"><i class="bi bi-search"></i></button>
+</div>
+
+</form>
+</div>
+</div>
+
 </main>
 </div>
 
-<?php include_once("../includes/footer.php"); ?>

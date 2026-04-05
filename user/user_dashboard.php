@@ -132,7 +132,7 @@ $logStmt->close();
         <div class="container mb-4">
             <div class="row g-3">
                 <div class="col-md-12">
-                    <div class="card shadow-sm p-3" style="height: 150px">
+                    <div class="card shadow-sm p-3" style="max-height: 250px; overflow-y: auto;">
                         <h5 class="text-success fw-bold text-start">My Recent Request</h5>
                         <table class="table table-sm table-bordered text-center align-middle mt-2">
                             <thead class="table-success">
@@ -167,7 +167,7 @@ $logStmt->close();
 
                 <!-- AVAILABLE ITEMS -->
                 <div class="col-md-6">
-                    <div class="card shadow-sm p-3" style="height: 200px;">
+                    <div class="card shadow-sm p-3" style="max-height: 250px; overflow-y: auto;">
                         <h5 class="text-success fw-bold text-start">Available Items</h5>
                         <table class="table table-sm table-hover text-center mt-2">
                             <thead class="table-success">
@@ -200,7 +200,7 @@ $logStmt->close();
 
                 <!-- ACTIVITY LOG -->
                 <div class="col-md-6">
-                    <div class="card shadow-sm p-3" style="height: 200px;">
+                    <div class="card shadow-sm p-3" style="max-height: 250px; overflow-y: auto;">
                         <h5 class="text-success fw-bold text-start">Activity Log</h5>
                         <table class="table table-sm table-bordered text-center mt-2">
                             <thead class="table-success">
@@ -230,4 +230,3 @@ $logStmt->close();
     </main>
 </div>
 
-<?php include_once("../includes/footer.php"); ?>

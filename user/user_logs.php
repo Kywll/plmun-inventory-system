@@ -18,19 +18,25 @@ $_SESSION['last_activity'] = time();
 
 $user_id = $_SESSION['user_id'];
 
-// ================= FETCH LOG COUNTS =================
-$totalActivities = 0;
-$requestMade = 0;
-$cancellations = 0;
+// ================= FILTER LOGIC =================
+$startDate = $_GET['start_date'] ?? '';
+$endDate = $_GET['end_date'] ?? '';
+$activityType = $_GET['activity_type'] ?? '';
 
-$countQuery = $conn->prepare("
+// ================= FETCH LOG COUNTS =================
+$countQueryStr = "
     SELECT 
         COUNT(*) as total,
         SUM(CASE WHEN action LIKE '%Requested%' THEN 1 ELSE 0 END) as requests,
         SUM(CASE WHEN action LIKE '%Cancelled%' THEN 1 ELSE 0 END) as cancelled
     FROM logs
     WHERE user_id = ?
-");
+";
+if (!empty($startDate)) $countQueryStr .= " AND DATE(timestamp) >= '$startDate'";
+if (!empty($endDate)) $countQueryStr .= " AND DATE(timestamp) <= '$endDate'";
+if (!empty($activityType)) $countQueryStr .= " AND action LIKE '%$activityType%'";
+
+$countQuery = $conn->prepare($countQueryStr);
 $countQuery->bind_param("i", $user_id);
 $countQuery->execute();
 $countResult = $countQuery->get_result()->fetch_assoc();
@@ -42,13 +48,26 @@ $cancellations = $countResult['cancelled'] ?? 0;
 $countQuery->close();
 
 // ================= FETCH USER LOGS =================
-$logsQuery = $conn->prepare("
+$logsQueryStr = "
     SELECT *
     FROM logs
     WHERE user_id = ?
-    ORDER BY timestamp DESC
-");
-$logsQuery->bind_param("i", $user_id);
+";
+if (!empty($startDate)) $logsQueryStr .= " AND DATE(timestamp) >= ?";
+if (!empty($endDate)) $logsQueryStr .= " AND DATE(timestamp) <= ?";
+if (!empty($activityType)) $logsQueryStr .= " AND action LIKE ?";
+
+$logsQueryStr .= " ORDER BY timestamp DESC";
+
+$logsQuery = $conn->prepare($logsQueryStr);
+
+$params = [$user_id];
+$types = "i";
+if (!empty($startDate)) { $params[] = $startDate; $types .= "s"; }
+if (!empty($endDate)) { $params[] = $endDate; $types .= "s"; }
+if (!empty($activityType)) { $params[] = "%$activityType%"; $types .= "s"; }
+
+$logsQuery->bind_param($types, ...$params);
 $logsQuery->execute();
 $logsResult = $logsQuery->get_result();
 
@@ -63,7 +82,7 @@ $logsQuery->close();
 <div class="d-flex">
 <?php include_once("../includes/sidebar_user.php"); ?>
 
-<main class="flex-grow-1 p-4" style="margin-left: 250px;">
+<main class="flex-grow-1 p-4" style="margin-left: 250px; height: 100vh; overflow-y: auto;">
 <h2 class="mb-4 text-success fw-bold">My Activity Logs</h2>
 
 <div class="container mb-4">
@@ -93,13 +112,13 @@ $logsQuery->close();
 </div>
 </div>
 
-<div class="container">
+<div class="container mb-4">
 <div class="card shadow-sm p-3">
 <h5 class="text-success fw-bold mb-3">Activity History</h5>
 
-<div class="table-responsive">
+<div style="max-height: 400px; overflow-y: auto;">
 <table class="table table-bordered table-hover text-center align-middle">
-<thead class="table-success">
+<thead class="table-success" style="position: sticky; top: 0; z-index: 1;">
 <tr>
 <th>#</th>
 <th>Activity</th>
@@ -143,7 +162,32 @@ if (strpos($log['action'], 'Approved') !== false) {
 </div>
 </div>
 
+<div class="container mb-4">
+<div class="card shadow-sm p-3">
+<h5 class="text-success fw-bold mb-3">Filter Activities</h5>
+<form method="GET" class="row g-3 align-items-center">
+<div class="col-md-4">
+<input type="date" name="start_date" class="form-control" value="<?php echo htmlspecialchars($startDate); ?>">
+</div>
+<div class="col-md-4">
+<input type="date" name="end_date" class="form-control" value="<?php echo htmlspecialchars($endDate); ?>">
+</div>
+<div class="col-md-4">
+<select name="activity_type" class="form-select">
+<option value="">Activity Type</option>
+<option value="Login" <?php if($activityType == 'Login') echo 'selected'; ?>>Login</option>
+<option value="Requested" <?php if($activityType == 'Requested') echo 'selected'; ?>>Request Submitted</option>
+<option value="Cancelled" <?php if($activityType == 'Cancelled') echo 'selected'; ?>>Request Cancelled</option>
+<option value="Password" <?php if($activityType == 'Password') echo 'selected'; ?>>Password Change</option>
+</select>
+</div>
+<div class="col-md-12 mt-3">
+<button type="submit" class="btn btn-success w-100">Apply Filter</button>
+</div>
+</form>
+</div>
+</div>
+
 </main>
 </div>
 
-<?php include_once("../includes/footer.php"); ?>

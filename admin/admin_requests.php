@@ -191,41 +191,16 @@ $result = $stmt->get_result();
 <div class="d-flex">
 <?php include_once("../includes/sidebar_admin.php"); ?>
 
-<main class="flex-grow-1 p-4" style="margin-left: 250px;">
+<main class="flex-grow-1 p-4" style="margin-left: 250px; height: 100vh; overflow-y: auto;">
 <h2 class="mb-4 text-success fw-bold">Request Management</h2>
-
-<div class="container mb-4">
-<div class="card shadow-sm p-3">
-<h5 class="text-success fw-bold mb-3">Filter Requests</h5>
-<form method="GET" class="row g-3 align-items-center">
-<div class="col-md-3">
-<select name="status" class="form-select">
-<option selected>Status</option>
-<option value="Pending">Pending</option>
-<option value="Approved">Approved</option>
-<option value="Declined">Declined</option>
-</select>
-</div>
-<div class="col-md-3">
-<input type="text" name="department" class="form-control" placeholder="Department">
-</div>
-<div class="col-md-3">
-<input type="date" name="date" class="form-control">
-</div>
-<div class="col-md-3">
-<button type="submit" class="btn btn-success w-100">Apply Filter</button>
-</div>
-</form>
-</div>
-</div>
 
 <div class="container mb-4">
 <div class="card shadow-sm p-3">
 <h5 class="text-success fw-bold mb-3">Incoming Requests</h5>
 
-<div class="table-responsive">
+<div style="max-height: 400px; overflow-y: auto;">
 <table class="table table-bordered table-hover align-middle text-center">
-<thead class="table-success">
+<thead class="table-success" style="position: sticky; top: 0; z-index: 1;">
 <tr>
 <th>#</th>
 <th>Requested By</th>
@@ -289,11 +264,35 @@ while ($row = $result->fetch_assoc()):
 </div>
 </div>
 
+<div class="container mb-4">
+<div class="card shadow-sm p-3">
+<h5 class="text-success fw-bold mb-3">Filter Requests</h5>
+<form method="GET" class="row g-3 align-items-center">
+<div class="col-md-3">
+<select name="status" class="form-select">
+<option value="">Status</option>
+<option value="Pending" <?php if($statusFilter == 'Pending') echo 'selected'; ?>>Pending</option>
+<option value="Approved" <?php if($statusFilter == 'Approved') echo 'selected'; ?>>Approved</option>
+<option value="Declined" <?php if($statusFilter == 'Declined') echo 'selected'; ?>>Declined</option>
+</select>
+</div>
+<div class="col-md-3">
+<input type="text" name="department" class="form-control" placeholder="Department" value="<?php echo htmlspecialchars($departmentFilter); ?>">
+</div>
+<div class="col-md-3">
+<input type="date" name="date" class="form-control" value="<?php echo htmlspecialchars($dateFilter); ?>">
+</div>
+<div class="col-md-3">
+<button type="submit" class="btn btn-success w-100">Apply Filter</button>
+</div>
+</form>
+</div>
+</div>
+
 </main>
 </div>
 
 <?php
-include_once("../includes/footer.php");
 $stmt->close();
 $conn->close();
 ?>

@@ -139,6 +139,5 @@ Save Settings
 </div>
 
 <?php
-include_once("../includes/footer.php");
 $conn->close();
 ?>

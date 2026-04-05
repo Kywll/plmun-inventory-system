@@ -114,19 +114,45 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 // ================= FETCH USER REQUESTS =================
-$requests = [];
-$listStmt = $conn->prepare("
+$statusFilter = $_GET['status'] ?? '';
+$startDate = $_GET['start_date'] ?? '';
+$endDate = $_GET['end_date'] ?? '';
+
+$query = "
     SELECT r.request_id, r.status, r.request_date, i.item_name
     FROM requests r
     JOIN request_items ri ON r.request_id = ri.request_id
     JOIN items i ON ri.item_id = i.item_id
     WHERE r.user_id = ?
-    ORDER BY r.request_date DESC
-");
-$listStmt->bind_param("i", $user_id);
+";
+
+$params = [$user_id];
+$types = "i";
+
+if (!empty($statusFilter)) {
+    $query .= " AND r.status = ?";
+    $params[] = $statusFilter;
+    $types .= "s";
+}
+if (!empty($startDate)) {
+    $query .= " AND DATE(r.request_date) >= ?";
+    $params[] = $startDate;
+    $types .= "s";
+}
+if (!empty($endDate)) {
+    $query .= " AND DATE(r.request_date) <= ?";
+    $params[] = $endDate;
+    $types .= "s";
+}
+
+$query .= " ORDER BY r.request_date DESC";
+
+$listStmt = $conn->prepare($query);
+$listStmt->bind_param($types, ...$params);
 $listStmt->execute();
 $listResult = $listStmt->get_result();
 
+$requests = [];
 while ($row = $listResult->fetch_assoc()) {
     $requests[] = $row;
 }
@@ -137,7 +163,7 @@ $listStmt->close();
 <div class="d-flex">
 <?php include_once("../includes/sidebar_user.php"); ?>
 
-<main class="flex-grow-1 p-4" style="margin-left: 250px;">
+<main class="flex-grow-1 p-4" style="margin-left: 250px; height: 100vh; overflow-y: auto;">
 <h2 class="mb-4 text-success fw-bold">My Requests</h2>
 
 <?php if (!empty($message)): ?>
@@ -147,9 +173,9 @@ $listStmt->close();
 <div class="container mb-4">
 <div class="card shadow-sm p-3">
 <h5 class="text-success fw-bold mb-3">Track Your Requests</h5>
-<div class="table-responsive">
+<div style="max-height: 400px; overflow-y: auto;">
 <table class="table table-bordered table-hover align-middle text-center">
-<thead class="table-success">
+<thead class="table-success" style="position: sticky; top: 0; z-index: 1;">
 <tr>
 <th>#</th>
 <th>Request</th>
@@ -185,6 +211,8 @@ $listStmt->close();
 </div>
 
 <div class="container mb-4">
+<div class="row g-3">
+<div class="col-md-7">
 <div class="card shadow-sm p-4">
 <h5 class="text-success fw-bold mb-3">Submit New Request</h5>
 <form method="POST">
@@ -212,7 +240,32 @@ $listStmt->close();
 </div>
 </div>
 
-</main>
+<div class="col-md-5">
+<div class="card shadow-sm p-4">
+<h5 class="text-success fw-bold mb-3">Filter Requests</h5>
+<form method="GET">
+<div class="mb-2">
+<select name="status" class="form-select">
+<option value="">Status</option>
+<option value="Pending" <?php if($statusFilter == 'Pending') echo 'selected'; ?>>Pending</option>
+<option value="Approved" <?php if($statusFilter == 'Approved') echo 'selected'; ?>>Approved</option>
+<option value="Declined" <?php if($statusFilter == 'Declined') echo 'selected'; ?>>Declined</option>
+<option value="Cancelled" <?php if($statusFilter == 'Cancelled') echo 'selected'; ?>>Cancelled</option>
+<option value="Completed" <?php if($statusFilter == 'Completed') echo 'selected'; ?>>Completed</option>
+</select>
+</div>
+<div class="mb-2">
+<input type="date" name="start_date" class="form-control" value="<?php echo htmlspecialchars($startDate); ?>">
+</div>
+<div class="mb-2">
+<input type="date" name="end_date" class="form-control" value="<?php echo htmlspecialchars($endDate); ?>">
+</div>
+<button type="submit" class="btn btn-success w-100 mt-2">Apply Filter</button>
+</form>
+</div>
+</div>
+</div>
 </div>
 
-<?php include_once("../includes/footer.php"); ?>
+</main>
+</div>

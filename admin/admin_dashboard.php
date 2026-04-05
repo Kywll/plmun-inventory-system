@@ -131,7 +131,7 @@ while ($row = $logs->fetch_assoc()) {
 <div class="container mb-4">
 <div class="row g-3">
 <div class="col-md-12">
-<div class="card shadow-sm p-3" style="height: 150px">
+<div class="card shadow-sm p-3" style="max-height: 200px; overflow-y: auto;">
 <h5 class="text-success fw-bold text-start">Latest Request</h5>
 <?php if ($latestRequest): ?>
 <p class="text-start">
@@ -152,7 +152,7 @@ while ($row = $logs->fetch_assoc()) {
 <div class="row g-3">
 
 <div class="col-md-6">
-<div class="card shadow-sm p-3" style="height: 150px;">
+<div class="card shadow-sm p-3" style="max-height: 200px; overflow-y: auto;">
 <h5 class="text-success fw-bold text-start">Urgent Request</h5>
 <?php if ($urgentRequest): ?>
 <p class="text-start">
@@ -167,7 +167,7 @@ while ($row = $logs->fetch_assoc()) {
 </div>
 
 <div class="col-md-6">
-<div class="card shadow-sm p-3" style="height: 150px;">
+<div class="card shadow-sm p-3" style="max-height: 200px; overflow-y: auto;">
 <h5 class="text-success fw-bold text-start">Top Requested Items</h5>
 <?php if (!empty($topRequested)): ?>
 <ul class="text-start">
@@ -187,7 +187,7 @@ while ($row = $logs->fetch_assoc()) {
 <div class="container mb-4">
 <div class="row g-3">
 <div class="col-md-12">
-<div class="card shadow-sm p-3" style="height: 150px">
+<div class="card shadow-sm p-3" style="max-height: 200px; overflow-y: auto;">
 <h5 class="text-success fw-bold text-start">Monthly Request Trend</h5>
 <?php if (!empty($trendData)): ?>
 <ul class="text-start">
@@ -207,7 +207,7 @@ while ($row = $logs->fetch_assoc()) {
 <div class="row g-3">
 
 <div class="col-md-9">
-<div class="card shadow-sm p-3" style="height: 150px;">
+<div class="card shadow-sm p-3" style="max-height: 200px; overflow-y: auto;">
 <h5 class="text-success fw-bold text-start">Activity Logs</h5>
 <?php if (!empty($activityLogs)): ?>
 <ul class="text-start">
@@ -225,7 +225,7 @@ while ($row = $logs->fetch_assoc()) {
 </div>
 
 <div class="col-md-3">
-<div class="card shadow-sm p-3 text-center" style="height: 150px;">
+<div class="card shadow-sm p-3 text-center" style="max-height: 200px; overflow-y: auto;">
 <h5 class="text-success fw-bold text-start">Generate PDF Report</h5>
 <a href="admin_reports.php" class="btn btn-success mt-3">View Reports</a>
 </div>
@@ -237,4 +237,3 @@ while ($row = $logs->fetch_assoc()) {
 </main>
 </div>
 
-<?php include_once("../includes/footer.php"); ?>
