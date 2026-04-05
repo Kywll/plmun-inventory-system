@@ -112,7 +112,6 @@ $lowStockItems = $conn->query("SELECT item_name, stock FROM items WHERE stock <=
 // ================= FETCH INVENTORY =================
 $items = $conn->query("SELECT * FROM items ORDER BY date_added DESC");
 
-include_once("../includes/header.php");
 ?>
 
 <div class="d-flex">

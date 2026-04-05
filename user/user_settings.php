@@ -61,7 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-include_once("../includes/header.php");
 ?>
 
 <div class="d-flex">

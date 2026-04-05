@@ -63,7 +63,6 @@ while ($row = $reportResult->fetch_assoc()) {
 }
 $reportQuery->close();
 
-include_once("../includes/header.php");
 ?>
 
 <div class="d-flex">

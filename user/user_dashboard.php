@@ -96,7 +96,6 @@ while ($row = $logResult->fetch_assoc()) {
 }
 $logStmt->close();
 
-include_once("../includes/header.php");
 ?>
 
 <div class="d-flex">

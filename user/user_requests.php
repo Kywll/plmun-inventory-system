@@ -132,7 +132,6 @@ while ($row = $listResult->fetch_assoc()) {
 }
 $listStmt->close();
 
-include_once("../includes/header.php");
 ?>
 
 <div class="d-flex">

@@ -67,7 +67,6 @@ $active_users = $conn->query("SELECT COUNT(*) as total FROM users WHERE status='
 $inactive_users = $conn->query("SELECT COUNT(*) as total FROM users WHERE status='Inactive'")->fetch_assoc()['total'];
 $recent_users = $conn->query("SELECT COUNT(*) as total FROM users WHERE date_created >= NOW() - INTERVAL 7 DAY")->fetch_assoc()['total'];
 
-include_once("../includes/header.php");
 ?>
 
 <div class="d-flex">

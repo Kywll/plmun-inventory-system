@@ -62,7 +62,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_password'])) {
     }
 }
 
-include_once("../includes/header.php");
 ?>
 
 <div class="d-flex">

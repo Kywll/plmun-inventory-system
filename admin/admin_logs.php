@@ -60,7 +60,6 @@ if (!empty($params)) {
 $stmt->execute();
 $result = $stmt->get_result();
 
-include_once("../includes/header.php");
 ?>
 
 <div class="d-flex">

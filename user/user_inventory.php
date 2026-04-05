@@ -80,7 +80,6 @@ while ($row = $supResult->fetch_assoc()) {
     $suppliers[] = $row['supplier_name'];
 }
 
-include_once("../includes/header.php");
 ?>
 
 <div class="d-flex">

@@ -58,7 +58,6 @@ while ($row = $logsResult->fetch_assoc()) {
 }
 $logsQuery->close();
 
-include_once("../includes/header.php");
 ?>
 
 <div class="d-flex">

@@ -86,7 +86,6 @@ while ($row = $logs->fetch_assoc()) {
     $activityLogs[] = $row;
 }
 
-include_once("../includes/header.php");
 ?>
 
 <div class="d-flex">
