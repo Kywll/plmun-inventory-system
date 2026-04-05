@@ -240,10 +240,10 @@ $result = $stmt->get_result();
 
 <div class="container mb-4">
 <div class="row g-3">
-<div class="col-md-3"><div class="card shadow-sm p-3 text-center"><h5>Total</h5><h3><?php echo $total; ?></h3></div></div>
-<div class="col-md-3"><div class="card shadow-sm p-3 text-center"><h5>Pending</h5><h3><?php echo $pending; ?></h3></div></div>
-<div class="col-md-3"><div class="card shadow-sm p-3 text-center"><h5>Approved</h5><h3><?php echo $approved; ?></h3></div></div>
-<div class="col-md-3"><div class="card shadow-sm p-3 text-center"><h5>Declined</h5><h3><?php echo $declined; ?></h3></div></div>
+<div class="col-md-3"><div class="card shadow-sm p-3 text-center"><h5 class="text-success fw-bold">Total</h5><h3><?php echo $total; ?></h3></div></div>
+<div class="col-md-3"><div class="card shadow-sm p-3 text-center"><h5 class="text-success fw-bold">Pending</h5><h3><?php echo $pending; ?></h3></div></div>
+<div class="col-md-3"><div class="card shadow-sm p-3 text-center"><h5 class="text-success fw-bold">Approved</h5><h3><?php echo $approved; ?></h3></div></div>
+<div class="col-md-3"><div class="card shadow-sm p-3 text-center"><h5 class="text-success fw-bold">Declined</h5><h3><?php echo $declined; ?></h3></div></div>
 </div>
 </div>
 

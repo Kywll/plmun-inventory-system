@@ -215,7 +215,7 @@ $items = $stmt->get_result();
 <div class="row g-3">
 <div class="col-md-9">
 <div class="card shadow-sm p-3" style="height: 450px;">
-<h5 class="mb-3">Inventory List</h5>
+<h5 class="mb-3 text-success fw-bold">Inventory List</h5>
 
 <div style="max-height: 380px; overflow-y: auto;">
 <table class="table table-bordered table-hover text-center align-middle">

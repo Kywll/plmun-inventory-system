@@ -203,28 +203,28 @@ $recent_users = $conn->query("SELECT COUNT(*) as total FROM users WHERE date_cre
 
 <div class="col-md-3">
 <div class="card shadow-sm p-3 text-center">
-<h5>Total Users</h5>
+<h5 class="text-success fw-bold">Total Users</h5>
 <h3><?php echo $total_users; ?></h3>
 </div>
 </div>
 
 <div class="col-md-3">
 <div class="card shadow-sm p-3 text-center">
-<h5>Active</h5>
+<h5 class="text-success fw-bold">Active</h5>
 <h3><?php echo $active_users; ?></h3>
 </div>
 </div>
 
 <div class="col-md-3">
 <div class="card shadow-sm p-3 text-center">
-<h5>Inactive</h5>
+<h5 class="text-success fw-bold">Inactive</h5>
 <h3><?php echo $inactive_users; ?></h3>
 </div>
 </div>
 
 <div class="col-md-3">
 <div class="card shadow-sm p-3 text-center">
-<h5>Recent</h5>
+<h5 class="text-success fw-bold">Recent</h5>
 <h3><?php echo $recent_users; ?></h3>
 </div>
 </div>
