@@ -289,7 +289,7 @@ $result = $stmt->get_result();
 <div class="row g-3">
 
 <div class="col-md-8">
-<div class="card shadow-sm p-3">
+<div class="card shadow-sm p-3" style="height: 200px;">
 <h5 class="text-success fw-bold mb-3">Filter Reports</h5>
 <form method="GET">
 <div class="row">
@@ -306,12 +306,12 @@ $result = $stmt->get_result();
 </div>
 
 <div class="col-md-4">
-<div class="card shadow-sm p-3 text-center">
+<div class="card shadow-sm p-3 text-center" style="height: 200px;">
 <h5 class="text-success fw-bold mb-3">Export Reports</h5>
 
-<a href="?export=pdf&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>" class="btn btn-danger w-100 mb-2">Export PDF</a>
-<a href="?export=excel&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>" class="btn btn-success w-100 mb-2">Export Excel</a>
-<a href="?export=csv&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>" class="btn btn-primary w-100">Export CSV</a>
+<a href="?export=pdf&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>" class="btn btn-danger w-100 mb-2 btn-sm">Export PDF</a>
+<a href="?export=excel&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>" class="btn btn-success w-100 mb-2 btn-sm">Export Excel</a>
+<a href="?export=csv&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>" class="btn btn-primary w-100 btn-sm">Export CSV</a>
 
 </div>
 </div>

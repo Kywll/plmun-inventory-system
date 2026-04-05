@@ -167,12 +167,13 @@ while ($row = $supResult->fetch_assoc()) {
 <main class="flex-grow-1 p-4" style="margin-left: 250px; height: 100vh; overflow-y: auto;">
 <h2 class="mb-4 text-success fw-bold">Inventory</h2>
 
+<!-- TABLE -->
 <div class="container mb-4">
 <div class="row g-3">
 <div class="col-md-9">
-<div class="card shadow-sm p-3">
+<div class="card shadow-sm p-3" style="height: 450px;">
 <h5 class="text-success fw-bold mb-3">Available Items</h5>
-<div style="max-height: 400px; overflow-y: auto;">
+<div style="max-height: 380px; overflow-y: auto;">
 <table class="table table-bordered table-hover align-middle text-center">
 <thead class="table-success" style="position: sticky; top: 0; z-index: 1;">
 <tr>
@@ -218,11 +219,13 @@ if ($item['stock'] <= 0) {
 </div>
 
 <div class="col-md-3">
-<div class="card shadow-sm p-3 text-center">
-<h5 class="text-success fw-bold mb-3">Export Inventory</h5>
-<a href="?export=pdf&search=<?php echo urlencode($search); ?>&category=<?php echo urlencode($category); ?>&supplier=<?php echo urlencode($supplier); ?>" class="btn btn-danger m-1 w-100">Export PDF</a>
-<a href="?export=excel&search=<?php echo urlencode($search); ?>&category=<?php echo urlencode($category); ?>&supplier=<?php echo urlencode($supplier); ?>" class="btn btn-success m-1 w-100">Export Excel</a>
+<div class="card shadow-sm p-3 text-center d-flex flex-column justify-content-center" style="height: 450px;">
+<h5 class="text-success fw-bold mb-4">Export Inventory</h5>
+<div class="px-2">
+<a href="?export=pdf&search=<?php echo urlencode($search); ?>&category=<?php echo urlencode($category); ?>&supplier=<?php echo urlencode($supplier); ?>" class="btn btn-danger m-1 w-100 mb-3">Export PDF</a>
+<a href="?export=excel&search=<?php echo urlencode($search); ?>&category=<?php echo urlencode($category); ?>&supplier=<?php echo urlencode($supplier); ?>" class="btn btn-success m-1 w-100 mb-3">Export Excel</a>
 <a href="?export=csv&search=<?php echo urlencode($search); ?>&category=<?php echo urlencode($category); ?>&supplier=<?php echo urlencode($supplier); ?>" class="btn btn-primary m-1 w-100">Export CSV</a>
+</div>
 </div>
 </div>
 </div>

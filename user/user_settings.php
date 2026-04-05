@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <div class="d-flex">
 <?php include_once("../includes/sidebar_user.php"); ?>
 
-<main class="flex-grow-1 p-4" style="margin-left: 250px;">
+<main class="flex-grow-1 p-4" style="margin-left: 250px; height: 100vh; overflow-y: auto;">
 <h2 class="mb-4 text-success fw-bold">Account Settings</h2>
 
 <div class="container">
@@ -99,22 +99,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <div class="col-md-6">
 
-<!-- ACCOUNT INFO -->
-<div class="card shadow-sm p-4 mb-4">
-<h5 class="text-success fw-bold mb-3">Account Information</h5>
+<!-- ACCOUNT INFO & NOTIFICATIONS -->
+<div class="card shadow-sm p-4" style="height: 500px;">
+<h5 class="text-success fw-bold mb-3">Account & Notifications</h5>
 
+<div class="mb-4">
+<h6 class="fw-bold text-muted border-bottom pb-2">Profile Information</h6>
 <div class="mb-2">
 <strong>Name:</strong> <?php echo htmlspecialchars($user['first_name']." ".$user['last_name']); ?>
 </div>
-
 <div class="mb-2">
 <strong>Department:</strong> <?php echo htmlspecialchars($user['department']); ?>
 </div>
-
 <div class="mb-2">
 <strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?>
 </div>
-
 <div class="mb-2">
 <strong>Status:</strong>
 <span class="badge bg-<?php echo $user['status']=='Active'?'success':'danger'; ?>">
@@ -123,49 +122,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 </div>
 
-<!-- NOTIFICATION PREFERENCES -->
-<div class="card shadow-sm p-4">
-<h5 class="text-success fw-bold mb-3">Notification Preferences</h5>
-
+<div class="mt-auto">
+<h6 class="fw-bold text-muted border-bottom pb-2">Preferences</h6>
 <form method="POST">
-
 <div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="notify_request"
 <?php if ($user['notify_request']) echo "checked"; ?>>
 <label class="form-check-label">Request status updates</label>
 </div>
-
 <div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="notify_approval"
 <?php if ($user['notify_approval']) echo "checked"; ?>>
 <label class="form-check-label">Approval / Decline notifications</label>
 </div>
-
 <div class="form-check mb-2">
 <input class="form-check-input" type="checkbox" name="notify_lowstock"
 <?php if ($user['notify_lowstock']) echo "checked"; ?>>
 <label class="form-check-label">Low-stock item alerts</label>
 </div>
-
 <button type="submit" name="save_notifications" class="btn btn-success w-100 mt-3">
 Save Preferences
 </button>
-
 </form>
+</div>
 </div>
 
 </div>
 
 <!-- CHANGE PASSWORD -->
 <div class="col-md-6">
-<div class="card shadow-sm p-4">
-<h5 class="text-success fw-bold mb-3">Change Password</h5>
+<div class="card shadow-sm p-4" style="height: 500px;">
+<h5 class="text-success fw-bold mb-3">Security Settings</h5>
+
+<h6 class="fw-bold text-muted border-bottom pb-2 mb-4">Change Password</h6>
 
 <?php if (!empty($message)): ?>
-<div class="alert alert-info"><?php echo htmlspecialchars($message); ?></div>
+<div class="alert alert-info py-2"><?php echo htmlspecialchars($message); ?></div>
 <?php endif; ?>
 
-<form method="POST">
+<form method="POST" class="mt-2">
 <div class="mb-3">
 <label class="form-label">Current Password</label>
 <input type="password" name="current_password" class="form-control" required>
@@ -181,9 +176,11 @@ Save Preferences
 <input type="password" name="confirm_password" class="form-control" required>
 </div>
 
+<div class="mt-auto pt-4">
 <button type="submit" class="btn btn-success w-100">
 Update Password
 </button>
+</div>
 </form>
 
 </div>

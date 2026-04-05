@@ -236,10 +236,10 @@ $recent_users = $conn->query("SELECT COUNT(*) as total FROM users WHERE date_cre
 <div class="container mb-4">
 <div class="row g-3">
 <div class="col-md-9">
-<div class="card shadow-sm p-3">
+<div class="card shadow-sm p-3" style="height: 450px;">
 <h5 class="mb-3">User List</h5>
 
-<div style="max-height: 400px; overflow-y: auto;">
+<div style="max-height: 380px; overflow-y: auto;">
 <table class="table table-bordered table-hover text-center align-middle">
 
 <thead class="table-success" style="position: sticky; top: 0; z-index: 1;">
@@ -299,11 +299,13 @@ Update
 </div>
 
 <div class="col-md-3">
-<div class="card shadow-sm p-3 text-center">
-<h5>Export Users</h5>
-<a href="?export=pdf&search=<?php echo urlencode($search); ?>&department=<?php echo urlencode($deptFilter); ?>&status=<?php echo urlencode($statusFilter); ?>" class="btn btn-danger w-100 mb-2">Export PDF</a>
-<a href="?export=excel&search=<?php echo urlencode($search); ?>&department=<?php echo urlencode($deptFilter); ?>&status=<?php echo urlencode($statusFilter); ?>" class="btn btn-success w-100 mb-2">Export Excel</a>
+<div class="card shadow-sm p-3 text-center d-flex flex-column justify-content-center" style="height: 450px;">
+<h5 class="text-success fw-bold mb-4">Export Users</h5>
+<div class="px-2">
+<a href="?export=pdf&search=<?php echo urlencode($search); ?>&department=<?php echo urlencode($deptFilter); ?>&status=<?php echo urlencode($statusFilter); ?>" class="btn btn-danger w-100 mb-3">Export PDF</a>
+<a href="?export=excel&search=<?php echo urlencode($search); ?>&department=<?php echo urlencode($deptFilter); ?>&status=<?php echo urlencode($statusFilter); ?>" class="btn btn-success w-100 mb-3">Export Excel</a>
 <a href="?export=csv&search=<?php echo urlencode($search); ?>&department=<?php echo urlencode($deptFilter); ?>&status=<?php echo urlencode($statusFilter); ?>" class="btn btn-primary w-100">Export CSV</a>
+</div>
 </div>
 </div>
 </div>

@@ -213,7 +213,7 @@ $listStmt->close();
 <div class="container mb-4">
 <div class="row g-3">
 <div class="col-md-7">
-<div class="card shadow-sm p-4">
+<div class="card shadow-sm p-4" style="height: 350px;">
 <h5 class="text-success fw-bold mb-3">Submit New Request</h5>
 <form method="POST">
 <div class="col-md-12 mb-3">
@@ -241,7 +241,7 @@ $listStmt->close();
 </div>
 
 <div class="col-md-5">
-<div class="card shadow-sm p-4">
+<div class="card shadow-sm p-4" style="height: 350px;">
 <h5 class="text-success fw-bold mb-3">Filter Requests</h5>
 <form method="GET">
 <div class="mb-2">
@@ -260,7 +260,9 @@ $listStmt->close();
 <div class="mb-2">
 <input type="date" name="end_date" class="form-control" value="<?php echo htmlspecialchars($endDate); ?>">
 </div>
-<button type="submit" class="btn btn-success w-100 mt-2">Apply Filter</button>
+<div class="mt-auto">
+<button type="submit" class="btn btn-success w-100 mt-4">Apply Filter</button>
+</div>
 </form>
 </div>
 </div>

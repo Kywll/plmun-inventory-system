@@ -19,6 +19,13 @@ $_SESSION['last_activity'] = time();
 $admin_id = $_SESSION['user_id'];
 $message = "";
 
+// ================= FETCH ADMIN DATA =================
+$stmt = $conn->prepare("SELECT * FROM users WHERE user_id=?");
+$stmt->bind_param("i", $admin_id);
+$stmt->execute();
+$admin_data = $stmt->get_result()->fetch_assoc();
+$stmt->close();
+
 // ================= HANDLE PASSWORD UPDATE =================
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_password'])) {
 
@@ -26,15 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_password'])) {
     $newPassword = $_POST['new_password'];
     $confirmPassword = $_POST['confirm_password'];
 
-    // Fetch current hashed password
-    $stmt = $conn->prepare("SELECT password FROM users WHERE user_id=?");
-    $stmt->bind_param("i", $admin_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $user = $result->fetch_assoc();
-    $stmt->close();
-
-    if (!$user || !password_verify($currentPassword, $user['password'])) {
+    if (!$admin_data || !password_verify($currentPassword, $admin_data['password'])) {
         $message = "<div class='alert alert-danger'>Current password is incorrect.</div>";
     } elseif ($newPassword !== $confirmPassword) {
         $message = "<div class='alert alert-danger'>New passwords do not match.</div>";
@@ -62,13 +61,34 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_password'])) {
     }
 }
 
+// ================= HANDLE NOTIFICATIONS UPDATE =================
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['save_notifications'])) {
+    $notify_request = isset($_POST['notify_request']) ? 1 : 0;
+    $notify_approval = isset($_POST['notify_approval']) ? 1 : 0;
+    $notify_lowstock = isset($_POST['notify_lowstock']) ? 1 : 0;
+
+    $update = $conn->prepare("UPDATE users SET notify_request=?, notify_approval=?, notify_lowstock=? WHERE user_id=?");
+    $update->bind_param("iiii", $notify_request, $notify_approval, $notify_lowstock, $admin_id);
+    
+    if ($update->execute()) {
+        $message = "<div class='alert alert-success'>Notification preferences updated.</div>";
+        // Refresh admin data
+        $admin_data['notify_request'] = $notify_request;
+        $admin_data['notify_approval'] = $notify_approval;
+        $admin_data['notify_lowstock'] = $notify_lowstock;
+    } else {
+        $message = "<div class='alert alert-danger'>Failed to update preferences.</div>";
+    }
+    $update->close();
+}
+
 ?>
 
 <div class="d-flex">
 
 <?php include_once("../includes/sidebar_admin.php"); ?>
 
-<main class="flex-grow-1 p-4" style="margin-left: 250px;">
+<main class="flex-grow-1 p-4" style="margin-left: 250px; height: 100vh; overflow-y: auto;">
 <h2 class="mb-4 text-success fw-bold">Settings</h2>
 
 <div class="container mb-4">
@@ -76,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_password'])) {
 
 <!-- Change Password -->
 <div class="col-md-6">
-<div class="card shadow-sm p-4">
+<div class="card shadow-sm p-4" style="height: 400px;">
 <h5 class="text-success fw-bold mb-3">Change Password</h5>
 
 <?php echo $message; ?>
@@ -97,36 +117,43 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['update_password'])) {
 <input type="password" name="confirm_password" class="form-control" required>
 </div>
 
+<div class="mt-auto">
 <button type="submit" name="update_password" class="btn btn-success w-100">
 Update Password
 </button>
+</div>
 </form>
 </div>
 </div>
 
-<!-- Security & Notifications (UI only for now) -->
+<!-- Security & Notifications -->
 <div class="col-md-6">
-<div class="card shadow-sm p-4">
+<div class="card shadow-sm p-4 d-flex flex-column" style="height: 400px;">
 <h5 class="text-success fw-bold mb-3">Security & Notifications</h5>
 
-<form>
+<form class="d-flex flex-column h-100">
+<div class="mb-4">
+<h6 class="fw-bold text-muted border-bottom pb-2 mb-3">Alert Preferences</h6>
 <div class="form-check mb-3">
-<input class="form-check-input" type="checkbox" id="notifyLogin">
+<input class="form-check-input" type="checkbox" id="notifyLogin" checked disabled>
 <label class="form-check-label" for="notifyLogin">
 Notify me on new login from unknown device
 </label>
 </div>
 
 <div class="form-check mb-3">
-<input class="form-check-input" type="checkbox" id="notifyChanges">
+<input class="form-check-input" type="checkbox" id="notifyChanges" checked disabled>
 <label class="form-check-label" for="notifyChanges">
 Notify me when my account settings are changed
 </label>
 </div>
+</div>
 
-<button type="submit" class="btn btn-success w-100">
+<div class="mt-auto">
+<button type="submit" class="btn btn-success w-100" disabled title="Settings are currently locked for Admin">
 Save Settings
 </button>
+</div>
 </form>
 
 </div>
