@@ -199,39 +199,84 @@ $recent_users = $conn->query("SELECT COUNT(*) as total FROM users WHERE date_cre
 
 <!-- SUMMARY -->
 <div class="container mb-4">
-<div class="row g-3">
+  <div class="row g-3">
 
-<div class="col-md-3">
-<div class="card shadow-sm p-3 text-center">
-<h5 class="text-success fw-bold">Total Users</h5>
-<h3><?php echo $total_users; ?></h3>
-</div>
-</div>
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm h-100" style="border-radius:12px">
+        <div class="card-body p-3">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-success fw-bold" style="font-size:13px">Total Users</span>
+            <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E6F1FB">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <circle cx="6" cy="5" r="2.5" stroke="#185FA5" stroke-width="1.5"/>
+                <path d="M1.5 13.5c0-2.485 2.015-4.5 4.5-4.5s4.5 2.015 4.5 4.5" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="11.5" cy="5.5" r="2" stroke="#185FA5" stroke-width="1.3"/>
+                <path d="M14 13c0-1.657-1.12-3.07-2.672-3.43" stroke="#185FA5" stroke-width="1.3" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="fw-medium lh-1 mb-1" style="font-size:28px"><?php echo $total_users; ?></div>
+          <div class="text-secondary" style="font-size:12px">Registered accounts</div>
+        </div>
+      </div>
+    </div>
 
-<div class="col-md-3">
-<div class="card shadow-sm p-3 text-center">
-<h5 class="text-success fw-bold">Active</h5>
-<h3><?php echo $active_users; ?></h3>
-</div>
-</div>
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm h-100" style="border-radius:12px">
+        <div class="card-body p-3">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-success fw-bold" style="font-size:13px">Active</span>
+            <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <circle cx="8" cy="8" r="6" stroke="#0F6E56" stroke-width="1.5"/>
+                <path d="M5.5 8.5l2 2 3-4" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="fw-medium lh-1 mb-1" style="font-size:28px"><?php echo $active_users; ?></div>
+          <div class="text-secondary" style="font-size:12px">Currently active</div>
+        </div>
+      </div>
+    </div>
 
-<div class="col-md-3">
-<div class="card shadow-sm p-3 text-center">
-<h5 class="text-success fw-bold">Inactive</h5>
-<h3><?php echo $inactive_users; ?></h3>
-</div>
-</div>
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm h-100" style="border-radius:12px">
+        <div class="card-body p-3">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-success fw-bold" style="font-size:13px">Inactive</span>
+            <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#FCEBEB">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <circle cx="8" cy="8" r="6" stroke="#A32D2D" stroke-width="1.5"/>
+                <path d="M5.5 5.5l5 5M10.5 5.5l-5 5" stroke="#A32D2D" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="fw-medium lh-1 mb-1" style="font-size:28px"><?php echo $inactive_users; ?></div>
+          <div class="text-secondary" style="font-size:12px">No recent activity</div>
+        </div>
+      </div>
+    </div>
 
-<div class="col-md-3">
-<div class="card shadow-sm p-3 text-center">
-<h5 class="text-success fw-bold">Recent</h5>
-<h3><?php echo $recent_users; ?></h3>
-</div>
-</div>
+    <div class="col-6 col-md-3">
+      <div class="card border-0 shadow-sm h-100" style="border-radius:12px">
+        <div class="card-body p-3">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-success fw-bold" style="font-size:13px">Recent</span>
+            <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#FAEEDA">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <circle cx="8" cy="8" r="6" stroke="#BA7517" stroke-width="1.5"/>
+                <path d="M8 5v3l2 1.5" stroke="#BA7517" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+          <div class="fw-medium lh-1 mb-1" style="font-size:28px"><?php echo $recent_users; ?></div>
+          <div class="text-secondary" style="font-size:12px">Joined this month</div>
+        </div>
+      </div>
+    </div>
 
+  </div>
 </div>
-</div>
-
 <!-- FILTER -->
 <div class="container mb-4">
 <div class="card shadow-sm p-3">
@@ -272,7 +317,7 @@ while($dept = $deptRes->fetch_assoc()) {
 <div class="row g-3">
 <div class="col-md-9">
 <div class="card shadow-sm p-3" style="height: 450px;">
-<h5 class="mb-3">User List</h5>
+<h5 class="mb-3 text-success fw-bold">User List</h5>
 
 <div style="max-height: 380px; overflow-y: auto;">
 <table class="table table-bordered table-hover text-center align-middle">

@@ -85,31 +85,70 @@ $logsQuery->close();
 <main class="flex-grow-1 p-4" style="margin-left: 250px; height: 100vh; overflow-y: auto;">
 <h2 class="mb-4 text-success fw-bold">My Activity Logs</h2>
 
+<!-- DASHBOARD ACTIVITY CARDS -->
 <div class="container mb-4">
-<div class="row g-3">
+    <div class="row g-3 d-flex align-items-stretch">
 
-<div class="col-md-4">
-<div class="card shadow-sm p-3 text-center">
-<h5 class="text-success fw-bold">Total Activites</h5>
-<h3><?php echo $totalActivities; ?></h3>
-</div>
-</div>
+        <!-- Total Activities -->
+        <div class="col-12 col-md-4 d-flex">
+            <div class="card border-0 shadow-sm flex-fill" style="border-radius:12px">
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-success fw-bold" style="font-size:13px">Total Activities</span>
+                        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E6F1FB">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <circle cx="6" cy="5" r="2.5" stroke="#185FA5" stroke-width="1.5"/>
+                                <path d="M1.5 13.5c0-2.485 2.015-4.5 4.5-4.5s4.5 2.015 4.5 4.5" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round"/>
+                                <circle cx="11.5" cy="5.5" r="2" stroke="#185FA5" stroke-width="1.3"/>
+                                <path d="M14 13c0-1.657-1.12-3.07-2.672-3.43" stroke="#185FA5" stroke-width="1.3"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="fw-medium lh-1 mb-1" style="font-size:28px"><?php echo $totalActivities; ?></div>
+                    <div class="text-secondary" style="font-size:12px">All activities logged</div>
+                </div>
+            </div>
+        </div>
 
-<div class="col-md-4">
-<div class="card shadow-sm p-3 text-center">
-<h5 class="text-success fw-bold">Request Made</h5>
-<h3><?php echo $requestMade; ?></h3>
-</div>
-</div>
+        <!-- Request Made -->
+        <div class="col-12 col-md-4 d-flex">
+            <div class="card border-0 shadow-sm flex-fill" style="border-radius:12px">
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-success fw-bold" style="font-size:13px">Request Made</span>
+                        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#FAEEDA">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <rect x="2" y="2" width="12" height="12" rx="2" stroke="#BA7517" stroke-width="1.5"/>
+                                <path d="M8 5v3.5l2 2" stroke="#BA7517" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="fw-medium lh-1 mb-1" style="font-size:28px"><?php echo $requestMade; ?></div>
+                    <div class="text-secondary" style="font-size:12px">Requests submitted</div>
+                </div>
+            </div>
+        </div>
 
-<div class="col-md-4">
-<div class="card shadow-sm p-3 text-center">
-<h5 class="text-success fw-bold">Cancellations</h5>
-<h3><?php echo $cancellations; ?></h3>
-</div>
-</div>
+        <!-- Cancellations -->
+        <div class="col-12 col-md-4 d-flex">
+            <div class="card border-0 shadow-sm flex-fill" style="border-radius:12px">
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-success fw-bold" style="font-size:13px">Cancellations</span>
+                        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#FCEBEB">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <line x1="3" y1="3" x2="13" y2="13" stroke="#A32D2D" stroke-width="1.5" stroke-linecap="round"/>
+                                <line x1="13" y1="3" x2="3" y2="13" stroke="#A32D2D" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="fw-medium lh-1 mb-1" style="font-size:28px"><?php echo $cancellations; ?></div>
+                    <div class="text-secondary" style="font-size:12px">Requests cancelled</div>
+                </div>
+            </div>
+        </div>
 
-</div>
+    </div>
 </div>
 
 <div class="container mb-4">

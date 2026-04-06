@@ -239,13 +239,88 @@ $result = $stmt->get_result();
 <h2 class="mb-4 text-success fw-bold">My Reports</h2>
 
 
+<!-- DASHBOARD SUMMARY CARDS -->
 <div class="container mb-4">
-<div class="row g-3">
-<div class="col-md-3"><div class="card shadow-sm p-3 text-center"><h5 class="text-success fw-bold">Total</h5><h3><?php echo $total; ?></h3></div></div>
-<div class="col-md-3"><div class="card shadow-sm p-3 text-center"><h5 class="text-success fw-bold">Pending</h5><h3><?php echo $pending; ?></h3></div></div>
-<div class="col-md-3"><div class="card shadow-sm p-3 text-center"><h5 class="text-success fw-bold">Approved</h5><h3><?php echo $approved; ?></h3></div></div>
-<div class="col-md-3"><div class="card shadow-sm p-3 text-center"><h5 class="text-success fw-bold">Declined</h5><h3><?php echo $declined; ?></h3></div></div>
-</div>
+    <div class="row g-3 d-flex align-items-stretch">
+
+        <!-- Total -->
+        <div class="col-12 col-md-3 d-flex">
+            <div class="card border-0 shadow-sm flex-fill" style="border-radius:12px">
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-success fw-bold" style="font-size:13px">Total</span>
+                        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E6F1FB">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <circle cx="6" cy="5" r="2.5" stroke="#185FA5" stroke-width="1.5"/>
+                                <path d="M1.5 13.5c0-2.485 2.015-4.5 4.5-4.5s4.5 2.015 4.5 4.5" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round"/>
+                                <circle cx="11.5" cy="5.5" r="2" stroke="#185FA5" stroke-width="1.3"/>
+                                <path d="M14 13c0-1.657-1.12-3.07-2.672-3.43" stroke="#185FA5" stroke-width="1.3"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="fw-medium lh-1 mb-1" style="font-size:28px"><?php echo $total; ?></div>
+                    <div class="text-secondary" style="font-size:12px">All requests</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending -->
+        <div class="col-12 col-md-3 d-flex">
+            <div class="card border-0 shadow-sm flex-fill" style="border-radius:12px">
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-success fw-bold" style="font-size:13px">Pending</span>
+                        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#FAEEDA">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <rect x="2" y="2" width="12" height="12" rx="2" stroke="#BA7517" stroke-width="1.5"/>
+                                <path d="M8 5v3.5l2 2" stroke="#BA7517" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="fw-medium lh-1 mb-1" style="font-size:28px"><?php echo $pending; ?></div>
+                    <div class="text-secondary" style="font-size:12px">Awaiting review</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Approved -->
+        <div class="col-12 col-md-3 d-flex">
+            <div class="card border-0 shadow-sm flex-fill" style="border-radius:12px">
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-success fw-bold" style="font-size:13px">Approved</span>
+                        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E6F1FB">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M2 8l4 4 8-8" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="fw-medium lh-1 mb-1" style="font-size:28px"><?php echo $approved; ?></div>
+                    <div class="text-secondary" style="font-size:12px">Requests approved</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Declined -->
+        <div class="col-12 col-md-3 d-flex">
+            <div class="card border-0 shadow-sm flex-fill" style="border-radius:12px">
+                <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-success fw-bold" style="font-size:13px">Declined</span>
+                        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#FCEBEB">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <line x1="3" y1="3" x2="13" y2="13" stroke="#A32D2D" stroke-width="1.5" stroke-linecap="round"/>
+                                <line x1="13" y1="3" x2="3" y2="13" stroke="#A32D2D" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="fw-medium lh-1 mb-1" style="font-size:28px"><?php echo $declined; ?></div>
+                    <div class="text-secondary" style="font-size:12px">Requests declined</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 <!-- FILTER + EXPORT -->
