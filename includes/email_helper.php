@@ -25,7 +25,7 @@ function send_notification_email($to, $subject, $message) {
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
         $mail->Username   = 'plmunsupplyinventorymanagement@gmail.com';
-        $mail->Password   = 'vkqm rggx srha evck';
+        $mail->Password   = 'APP_PASSWORD';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
 
