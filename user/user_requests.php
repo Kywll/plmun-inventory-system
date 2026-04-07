@@ -69,13 +69,14 @@ while ($row = $activeItemsResult->fetch_assoc()) {
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit_request'])) {
 
     $item_id = intval($_POST['item_id']);
+    $quantity = intval($_POST['quantity']);
     $urgency = trim($_POST['urgency']);
     $notes = trim($_POST['notes']);
 
-    if ($item_id > 0 && !empty($urgency)) {
+    if ($item_id > 0 && $quantity > 0 && !empty($urgency)) {
 
         // Find item to verify it exists and is active
-        $itemStmt = $conn->prepare("SELECT item_name FROM items WHERE item_id = ? AND is_active = 1");
+        $itemStmt = $conn->prepare("SELECT item_name, stock FROM items WHERE item_id = ? AND is_active = 1");
         $itemStmt->bind_param("i", $item_id);
         $itemStmt->execute();
         $itemResult = $itemStmt->get_result();
@@ -84,32 +85,36 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit_request'])) {
 
             $item = $itemResult->fetch_assoc();
             
-            $conn->begin_transaction();
+            // Check if requested quantity is available
+            if ($item['stock'] < $quantity) {
+                $message = "Insufficient stock available for " . $item['item_name'] . ". Current stock: " . $item['stock'];
+            } else {
+                $conn->begin_transaction();
 
-            try {
+                try {
+                    // Insert request header
+                    $reqStmt = $conn->prepare("INSERT INTO requests (user_id, status, remarks) VALUES (?, 'Pending', ?)");
+                    $reqStmt->bind_param("is", $user_id, $notes);
+                    $reqStmt->execute();
+                    $request_id = $reqStmt->insert_id;
 
-                // Insert request header
-                $reqStmt = $conn->prepare("INSERT INTO requests (user_id, status, remarks) VALUES (?, 'Pending', ?)");
-                $reqStmt->bind_param("is", $user_id, $notes);
-                $reqStmt->execute();
-                $request_id = $reqStmt->insert_id;
+                    // Insert request item
+                    $reqItemStmt = $conn->prepare("INSERT INTO request_items (request_id, item_id, quantity, status) VALUES (?, ?, ?, 'Pending')");
+                    $reqItemStmt->bind_param("iii", $request_id, $item_id, $quantity);
+                    $reqItemStmt->execute();
 
-                // Insert request item
-                $reqItemStmt = $conn->prepare("INSERT INTO request_items (request_id, item_id, quantity, status) VALUES (?, ?, 1, 'Pending')");
-                $reqItemStmt->bind_param("ii", $request_id, $item_id);
-                $reqItemStmt->execute();
+                    // Log
+                    $logStmt = $conn->prepare("INSERT INTO logs (request_id, user_id, item_id, action, quantity, remarks) VALUES (?, ?, ?, 'Request Submitted', ?, ?)");
+                    $logStmt->bind_param("iiiis", $request_id, $user_id, $item_id, $quantity, $urgency);
+                    $logStmt->execute();
 
-                // Log
-                $logStmt = $conn->prepare("INSERT INTO logs (request_id, user_id, item_id, action, quantity, remarks) VALUES (?, ?, ?, 'Request Submitted', 1, ?)");
-                $logStmt->bind_param("iiis", $request_id, $user_id, $item_id, $urgency);
-                $logStmt->execute();
+                    $conn->commit();
+                    $message = "Request submitted successfully for $quantity " . $item['item_name'] . "(s).";
 
-                $conn->commit();
-                $message = "Request submitted successfully.";
-
-            } catch (Exception $e) {
-                $conn->rollback();
-                $message = "Error submitting request.";
+                } catch (Exception $e) {
+                    $conn->rollback();
+                    $message = "Error submitting request.";
+                }
             }
 
         } else {
@@ -117,7 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['submit_request'])) {
         }
         $itemStmt->close();
     } else {
-        $message = "Please select an item and urgency level.";
+        $message = "Please select an item, valid quantity, and urgency level.";
     }
 }
 
@@ -127,7 +132,7 @@ $startDate = $_GET['start_date'] ?? '';
 $endDate = $_GET['end_date'] ?? '';
 
 $query = "
-    SELECT r.request_id, r.status, r.request_date, i.item_name
+    SELECT r.request_id, r.status, r.request_date, i.item_name, ri.quantity
     FROM requests r
     JOIN request_items ri ON r.request_id = ri.request_id
     JOIN items i ON ri.item_id = i.item_id
@@ -199,16 +204,21 @@ $listStmt->close();
 
                     <!-- FORM -->
                     <form method="POST" class="flex-fill d-flex flex-column">
-                        <div class="col-md-12 mb-3">
-                            <select name="item_id" class="form-select" required>
-                                <option value="">Select Item / Facility</option>
-                                <?php foreach ($activeItems as $item): ?>
-                                    <option value="<?php echo $item['item_id']; ?>">
-                                        <?php echo htmlspecialchars($item['item_name']); ?> 
-                                        (<?php echo htmlspecialchars($item['category']); ?>)
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                        <div class="row g-2 mb-3">
+                            <div class="col-8">
+                                <select name="item_id" class="form-select" required>
+                                    <option value="">Select Item / Facility</option>
+                                    <?php foreach ($activeItems as $item): ?>
+                                        <option value="<?php echo $item['item_id']; ?>">
+                                            <?php echo htmlspecialchars($item['item_name']); ?> 
+                                            (<?php echo htmlspecialchars($item['category']); ?>)
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="col-4">
+                                <input type="number" name="quantity" class="form-control" placeholder="Qty" min="1" required>
+                            </div>
                         </div>
 
                         <div class="col-md-12 mb-3">
@@ -307,6 +317,7 @@ $listStmt->close();
                                 <tr>
                                     <th>#</th>
                                     <th>Request</th>
+                                    <th>Quantity</th>
                                     <th>Status</th>
                                     <th>Submitted On</th>
                                     <th>Actions</th>
@@ -314,12 +325,13 @@ $listStmt->close();
                             </thead>
                             <tbody>
                                 <?php if (empty($requests)): ?>
-                                    <tr><td colspan="5">No requests found</td></tr>
+                                    <tr><td colspan="6">No requests found</td></tr>
                                 <?php else: ?>
                                     <?php foreach ($requests as $index => $req): ?>
                                         <tr>
                                             <td><?php echo $index + 1; ?></td>
                                             <td><?php echo htmlspecialchars($req['item_name']); ?></td>
+                                            <td class="fw-bold text-success"><?php echo htmlspecialchars($req['quantity']); ?></td>
                                             <td>
                                                 <?php
                                                 $status = $req['status'];
@@ -332,7 +344,7 @@ $listStmt->close();
                                                 ?>
                                                 <span class="badge <?php echo $badgeClass; ?>"><?php echo htmlspecialchars($status); ?></span>
                                             </td>
-                                            <td><?php echo $req['request_date']; ?></td>
+                                            <td><?php echo date('M d, Y', strtotime($req['request_date'])); ?></td>
                                             <td>
                                                 <?php if ($req['status'] === 'Pending'): ?>
                                                     <a href="?cancel=<?php echo $req['request_id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Cancel this request?')">Cancel</a>
