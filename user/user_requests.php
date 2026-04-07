@@ -58,61 +58,6 @@ if (isset($_GET['cancel'])) {
     $checkStmt->close();
 }
 
-// ================= RECEIVE REQUEST =================
-if (isset($_GET['receive'])) {
-    $request_id = intval($_GET['receive']);
-
-    $conn->begin_transaction();
-
-    // 1. Fetch item details and current stock
-    $stmt = $conn->prepare("
-        SELECT ri.request_id, ri.item_id, ri.quantity, i.stock, i.item_name
-        FROM request_items ri
-        JOIN requests r ON ri.request_id = r.request_id
-        JOIN items i ON ri.item_id = i.item_id
-        WHERE ri.request_id = ? AND r.user_id = ?
-    ");
-    $stmt->bind_param("ii", $request_id, $user_id);
-    $stmt->execute();
-    $data = $stmt->get_result()->fetch_assoc();
-    $stmt->close();
-
-    if ($data) {
-        if ($data['stock'] >= $data['quantity']) {
-            // 2. Update status to 'Completed'
-            $updateStmt = $conn->prepare("UPDATE requests SET status = 'Completed' WHERE request_id = ?");
-            $updateStmt->bind_param("i", $request_id);
-            $updateStmt->execute();
-            $updateStmt->close();
-
-            $updateItemStmt = $conn->prepare("UPDATE request_items SET status = 'Completed' WHERE request_id = ?");
-            $updateItemStmt->bind_param("i", $request_id);
-            $updateItemStmt->execute();
-            $updateItemStmt->close();
-
-            // 3. Deduct stock from items
-            $deductStmt = $conn->prepare("UPDATE items SET stock = stock - ? WHERE item_id = ?");
-            $deductStmt->bind_param("ii", $data['quantity'], $data['item_id']);
-            $deductStmt->execute();
-            $deductStmt->close();
-
-            // 4. Log the finalization
-            $logStmt = $conn->prepare("INSERT INTO logs (request_id, user_id, item_id, action, quantity, remarks) VALUES (?, ?, ?, 'Request Completed', ?, 'User received items and finalized transaction')");
-            $logStmt->bind_param("iiii", $request_id, $user_id, $data['item_id'], $data['quantity']);
-            $logStmt->execute();
-            $logStmt->close();
-
-            $conn->commit();
-            $message = "Request completed. Items received and stock updated.";
-        } else {
-            $conn->rollback();
-            $message = "Insufficient stock to complete this request.";
-        }
-    }
-    header("Location: user_requests.php");
-    exit();
-}
-
 // ================= FETCH ACTIVE ITEMS FOR DROPDOWN =================
 $activeItemsResult = $conn->query("SELECT item_id, item_name, category FROM items WHERE is_active = 1 ORDER BY item_name ASC");
 $activeItems = [];
@@ -392,7 +337,8 @@ $listStmt->close();
                                                 <?php if ($req['status'] === 'Pending'): ?>
                                                     <a href="?cancel=<?php echo $req['request_id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Cancel this request?')">Cancel</a>
                                                 <?php elseif ($req['status'] === 'Approved'): ?>
-                                                    <a href="?receive=<?php echo $req['request_id']; ?>" class="btn btn-sm btn-info text-white" onclick="return confirm('Confirm that you have received the items?')">Receive</a>
+                                                    <div class="text-success small fw-bold">Ready for Pickup</div>
+                                                    <div class="text-muted" style="font-size:10px;">Proceed to Inventory Room</div>
                                                 <?php else: ?>
                                                     <button class="btn btn-sm btn-secondary" disabled>—</button>
                                                 <?php endif; ?>

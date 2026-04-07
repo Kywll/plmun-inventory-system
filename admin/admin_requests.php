@@ -76,6 +76,73 @@ if (isset($_GET['approve'])) {
     exit();
 }
 
+// ================= HANDLE COMPLETE =================
+if (isset($_GET['complete'])) {
+
+    $request_item_id = intval($_GET['complete']);
+
+    $conn->begin_transaction();
+
+    // Fetch details and current stock
+    $stmt = $conn->prepare("
+        SELECT ri.request_id, ri.item_id, ri.quantity, i.stock, i.item_name
+        FROM request_items ri
+        JOIN items i ON ri.item_id = i.item_id
+        WHERE ri.request_item_id=?
+    ");
+    $stmt->bind_param("i", $request_item_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $data = $result->fetch_assoc();
+    $stmt->close();
+
+    if ($data) {
+        if ($data['stock'] >= $data['quantity']) {
+            // 1. Update statuses to Completed
+            $updateItem = $conn->prepare("UPDATE request_items SET status='Completed' WHERE request_item_id=?");
+            $updateItem->bind_param("i", $request_item_id);
+            $updateItem->execute();
+            $updateItem->close();
+
+            $updateHeader = $conn->prepare("UPDATE requests SET status='Completed' WHERE request_id=?");
+            $updateHeader->bind_param("i", $data['request_id']);
+            $updateHeader->execute();
+            $updateHeader->close();
+
+            // 2. Deduct stock
+            $deduct = $conn->prepare("UPDATE items SET stock = stock - ? WHERE item_id=?");
+            $deduct->bind_param("ii", $data['quantity'], $data['item_id']);
+            $deduct->execute();
+            $deduct->close();
+
+            // 3. Log activity
+            $log = $conn->prepare("
+                INSERT INTO logs (user_id, request_id, item_id, action, quantity, remarks)
+                VALUES (?, ?, ?, 'Request Completed', ?, ?)
+            ");
+            $remarks = "Item '" . $data['item_name'] . "' issued. Stock deducted.";
+            $log->bind_param("iiiis",
+                $admin_id,
+                $data['request_id'],
+                $data['item_id'],
+                $data['quantity'],
+                $remarks
+            );
+            $log->execute();
+            $log->close();
+
+            $conn->commit();
+            $_SESSION['msg'] = "<div class='alert alert-success shadow-sm' style='border-radius:12px;'>Request finalized. Stock deducted.</div>";
+        } else {
+            $conn->rollback();
+            $_SESSION['msg'] = "<div class='alert alert-danger shadow-sm' style='border-radius:12px;'>Insufficient stock to complete this request.</div>";
+        }
+    }
+
+    header("Location: admin_requests.php");
+    exit();
+}
+
 // ================= HANDLE DECLINE =================
 if (isset($_GET['decline'])) {
 
@@ -317,7 +384,7 @@ if ($status === 'Pending'): ?>
 <a href="?approve=<?php echo $row['request_item_id']; ?>" class="btn btn-sm btn-success">Approve</a>
 <a href="?decline=<?php echo $row['request_item_id']; ?>" class="btn btn-sm btn-danger">Decline</a>
 <?php elseif ($status === 'Approved'): ?>
-<span class="text-muted small">Awaiting User Receipt</span>
+<a href="?complete=<?php echo $row['request_item_id']; ?>" class="btn btn-sm btn-primary" onclick="return confirm('Mark this request as Completed? Stock will be deducted.')">Complete</a>
 <?php elseif ($status === 'Completed'): ?>
 <span class="badge bg-primary">Completed</span>
 <?php else: ?>
