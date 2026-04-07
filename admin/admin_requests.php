@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once("../includes/db_connect.php");
+require_once("../includes/email_helper.php");
 
 // ================= SESSION SECURITY =================
 if (!isset($_SESSION['user_id']) || $_SESSION['position'] !== 'Admin') {
@@ -26,9 +27,12 @@ if (isset($_GET['approve'])) {
     $conn->begin_transaction();
 
     $stmt = $conn->prepare("
-        SELECT request_id, item_id, quantity 
-        FROM request_items 
-        WHERE request_item_id=?
+        SELECT ri.request_id, ri.item_id, ri.quantity, u.email, u.first_name, u.notify_approval, i.item_name
+        FROM request_items ri
+        JOIN requests r ON ri.request_id = r.request_id
+        JOIN users u ON r.user_id = u.user_id
+        JOIN items i ON ri.item_id = i.item_id
+        WHERE ri.request_item_id=?
     ");
     $stmt->bind_param("i", $request_item_id);
     $stmt->execute();
@@ -55,6 +59,14 @@ if (isset($_GET['approve'])) {
         $updateHeader->bind_param("i", $data['request_id']);
         $updateHeader->execute();
         $updateHeader->close();
+
+        // Send Email Notification
+        if ($data['notify_approval'] == 1 && !empty($data['email'])) {
+            $subject = "Your Request for " . $data['item_name'] . " has been Approved!";
+            $action_message = "Your request has been accepted. You can now proceed to the <strong>Inventory and Facility Room</strong> to pick up your item.";
+            $email_body = get_status_email_template($data['first_name'], $data['item_name'], 'Approved', $action_message);
+            send_notification_email($data['email'], $subject, $email_body);
+        }
 
         $log = $conn->prepare("
             INSERT INTO logs (user_id, request_id, item_id, action, quantity, remarks)
@@ -85,9 +97,11 @@ if (isset($_GET['complete'])) {
 
     // Fetch details and current stock
     $stmt = $conn->prepare("
-        SELECT ri.request_id, ri.item_id, ri.quantity, i.stock, i.item_name
+        SELECT ri.request_id, ri.item_id, ri.quantity, i.stock, i.item_name, u.email, u.first_name, u.notify_approval
         FROM request_items ri
         JOIN items i ON ri.item_id = i.item_id
+        JOIN requests r ON ri.request_id = r.request_id
+        JOIN users u ON r.user_id = u.user_id
         WHERE ri.request_item_id=?
     ");
     $stmt->bind_param("i", $request_item_id);
@@ -114,6 +128,14 @@ if (isset($_GET['complete'])) {
             $deduct->bind_param("ii", $data['quantity'], $data['item_id']);
             $deduct->execute();
             $deduct->close();
+
+            // Send Email Notification
+            if ($data['notify_approval'] == 1 && !empty($data['email'])) {
+                $subject = "Your Request for " . $data['item_name'] . " is now Completed";
+                $action_message = "Your item has been successfully issued. The transaction is now closed. Thank you!";
+                $email_body = get_status_email_template($data['first_name'], $data['item_name'], 'Completed', $action_message);
+                send_notification_email($data['email'], $subject, $email_body);
+            }
 
             // 3. Log activity
             $log = $conn->prepare("
@@ -149,9 +171,12 @@ if (isset($_GET['decline'])) {
     $request_item_id = intval($_GET['decline']);
 
     $stmt = $conn->prepare("
-        SELECT request_id, item_id, quantity 
-        FROM request_items 
-        WHERE request_item_id=?
+        SELECT ri.request_id, ri.item_id, ri.quantity, u.email, u.first_name, u.notify_approval, i.item_name
+        FROM request_items ri
+        JOIN requests r ON ri.request_id = r.request_id
+        JOIN users u ON r.user_id = u.user_id
+        JOIN items i ON ri.item_id = i.item_id
+        WHERE ri.request_item_id=?
     ");
     $stmt->bind_param("i", $request_item_id);
     $stmt->execute();
@@ -178,6 +203,14 @@ if (isset($_GET['decline'])) {
         $updateHeader->bind_param("i", $data['request_id']);
         $updateHeader->execute();
         $updateHeader->close();
+
+        // Send Email Notification
+        if ($data['notify_approval'] == 1 && !empty($data['email'])) {
+            $subject = "Your Request for " . $data['item_name'] . " has been Declined";
+            $action_message = "We regret to inform you that your request has been declined. Please contact the administrator for more details.";
+            $email_body = get_status_email_template($data['first_name'], $data['item_name'], 'Declined', $action_message);
+            send_notification_email($data['email'], $subject, $email_body);
+        }
 
         $log = $conn->prepare("
             INSERT INTO logs (user_id, request_id, item_id, action, quantity, remarks)
