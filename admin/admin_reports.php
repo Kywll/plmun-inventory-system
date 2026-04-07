@@ -333,7 +333,7 @@ $result = $stmt->get_result();
   <div class="row g-3">
 
     <div class="col-6 col-md-3">
-      <div class="card border-0 shadow-sm h-100" style="border-radius:12px">
+      <div class="card border-1 shadow-sm h-100" style="border-radius:12px">
         <div class="card-body p-3">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="text-success fw-bold" style="font-size:13px">Total Requests</span>
@@ -351,7 +351,7 @@ $result = $stmt->get_result();
     </div>
 
     <div class="col-6 col-md-3">
-      <div class="card border-0 shadow-sm h-100" style="border-radius:12px">
+      <div class="card border-1 shadow-sm h-100" style="border-radius:12px">
         <div class="card-body p-3">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="text-success fw-bold" style="font-size:13px">Pending</span>
@@ -369,7 +369,7 @@ $result = $stmt->get_result();
     </div>
 
     <div class="col-6 col-md-3">
-      <div class="card border-0 shadow-sm h-100" style="border-radius:12px">
+      <div class="card border-1 shadow-sm h-100" style="border-radius:12px">
         <div class="card-body p-3">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="text-success fw-bold" style="font-size:13px">Approved</span>
@@ -387,7 +387,7 @@ $result = $stmt->get_result();
     </div>
 
     <div class="col-6 col-md-3">
-      <div class="card border-0 shadow-sm h-100" style="border-radius:12px">
+      <div class="card border-1 shadow-sm h-100" style="border-radius:12px">
         <div class="card-body p-3">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="text-success fw-bold" style="font-size:13px">Declined</span>
@@ -410,9 +410,18 @@ $result = $stmt->get_result();
 <div class="container mb-4">
 <div class="row g-3">
 
-<div class="col-md-8">
-<div class="card shadow-sm p-3" style="height: 200px;">
-<h5 class="text-success fw-bold mb-3">Filter Reports</h5>
+<div class="col-md-8 d-flex">
+<div class="card border-1 shadow-sm p-3 flex-fill" style="border-radius:12px; height: 200px;">
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-success fw-bold" style="font-size:15px">Filter Reports</span>
+        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M6 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" stroke="#0F6E56" stroke-width="1.5"/>
+                <path d="M11 11l4 4" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
 <form method="GET">
 <div class="row">
 <div class="col-md-4">
@@ -430,9 +439,18 @@ $result = $stmt->get_result();
 </div>
 </div>
 
-<div class="col-md-4">
-<div class="card shadow-sm p-3 text-center" style="height: 200px;">
-<h5 class="text-success fw-bold mb-3">Export Reports</h5>
+<div class="col-md-4 d-flex">
+<div class="card border-1 shadow-sm p-3 text-center flex-fill d-flex flex-column justify-content-center" style="border-radius:12px; height: 200px;">
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-success fw-bold" style="font-size:15px">Export Reports</span>
+        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 2h10v12H3z" stroke="#0F6E56" stroke-width="1.5"/>
+                <path d="M3 6h10M3 10h10" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
 
 <a href="admin_reports.php?export=pdf&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>&department=<?php echo urlencode($department); ?>" 
    class="btn btn-danger w-100 mb-2 btn-sm">
@@ -458,11 +476,20 @@ Export CSV
 
 <!-- TABLE -->
 <div class="container mb-4">
-<div class="card shadow-sm p-3">
-<h5 class="text-success fw-bold">Reports</h5>
+<div class="card border-1 shadow-sm p-3" style="border-radius:12px;">
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-success fw-bold" style="font-size:15px">Reports</span>
+        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <rect x="3" y="1.5" width="10" height="13" rx="1.5" stroke="#0F6E56" stroke-width="1.5"/>
+                <path d="M5.5 5.5h5M5.5 8h5M5.5 10.5h3" stroke="#0F6E56" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
 
 <div style="max-height: 400px; overflow-y: auto;">
-<table class="table table-bordered text-center align-middle">
+<table class="table table-sm table-bordered table-hover text-center align-middle mb-0">
 <thead class="table-success" style="position: sticky; top: 0; z-index: 1;">
 <tr>
 <th>#</th>
@@ -483,7 +510,18 @@ Export CSV
 <td><?php echo $row['item_name']; ?></td>
 <td><?php echo $row['quantity']; ?></td>
 <td><?php echo $row['department']; ?></td>
-<td><?php echo $row['status']; ?></td>
+<td>
+    <?php
+    $status = $row['status'];
+    $badgeClass = 'bg-info';
+    if ($status === 'Pending') $badgeClass = 'bg-warning text-dark';
+    elseif ($status === 'Approved') $badgeClass = 'bg-success';
+    elseif ($status === 'Declined') $badgeClass = 'bg-danger';
+    elseif ($status === 'Cancelled') $badgeClass = 'bg-secondary';
+    elseif ($status === 'Completed') $badgeClass = 'bg-primary';
+    ?>
+    <span class="badge <?php echo $badgeClass; ?>"><?php echo htmlspecialchars($status); ?></span>
+</td>
 <td><?php echo $row['request_date']; ?></td>
 </tr>
 <?php endwhile; ?>

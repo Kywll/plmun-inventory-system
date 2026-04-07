@@ -211,8 +211,17 @@ $items = $stmt->get_result();
 <h2 class="mb-4 text-success fw-bold">Inventory Management</h2>
 
 <div class="container mb-4">
-<div class="card shadow-sm p-3">
-<h5 class="text-success fw-bold mb-3">Add New Item</h5>
+<div class="card border-1 shadow-sm p-3" style="border-radius:12px;">
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-success fw-bold" style="font-size:15px">Add New Item</span>
+        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E6F1FB">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M2 2h12v12H2V2z" stroke="#185FA5" stroke-width="1.5"/>
+                <path d="M4 8h8M8 4v8" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
 <form method="POST" class="row g-3 align-items-center">
 <div class="col-md-3">
 <input type="text" name="item_name" class="form-control" placeholder="Item Name" required>
@@ -234,8 +243,17 @@ $items = $stmt->get_result();
 </div>
 
 <div class="container mb-4">
-<div class="card shadow-sm p-3">
-<h5 class="text-success fw-bold mb-3">Filter Inventory</h5>
+<div class="card border-1 shadow-sm p-3" style="border-radius:12px;">
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-success fw-bold" style="font-size:15px">Filter Inventory</span>
+        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M6 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" stroke="#0F6E56" stroke-width="1.5"/>
+                <path d="M11 11l4 4" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
 <form method="GET" class="row g-3 align-items-center">
 <div class="col-md-3">
 <input type="text" name="search" class="form-control" placeholder="Search item or supplier" value="<?php echo htmlspecialchars($search); ?>">
@@ -271,12 +289,21 @@ while($cat = $catRes->fetch_assoc()) {
 <!-- TABLE -->
 <div class="container mb-4">
 <div class="row g-3">
-<div class="col-md-9">
-<div class="card shadow-sm p-3" style="height: 450px;">
-<h5 class="mb-3 text-success fw-bold">Inventory List</h5>
+<div class="col-md-9 d-flex">
+<div class="card border-1 shadow-sm p-3 flex-fill d-flex flex-column" style="border-radius:12px; height: 450px;">
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-success fw-bold" style="font-size:15px">Inventory List</span>
+        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <rect x="3" y="1.5" width="10" height="13" rx="1.5" stroke="#0F6E56" stroke-width="1.5"/>
+                <path d="M5.5 5.5h5M5.5 8h5M5.5 10.5h3" stroke="#0F6E56" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
 
 <div style="max-height: 380px; overflow-y: auto;">
-<table class="table table-bordered table-hover text-center align-middle">
+<table class="table table-sm table-bordered table-hover text-center align-middle mb-0">
 <thead class="table-success" style="position: sticky; top: 0; z-index: 1;">
 <tr>
 <th>#</th>
@@ -341,9 +368,18 @@ while($cat = $catRes->fetch_assoc()) {
 </div>
 </div>
 
-<div class="col-md-3">
-<div class="card shadow-sm p-3 text-center d-flex flex-column justify-content-center" style="height: 450px;">
-<h5 class="text-success fw-bold mb-4">Export Inventory</h5>
+<div class="col-md-3 d-flex">
+<div class="card border-1 shadow-sm p-3 text-center d-flex flex-column justify-content-center flex-fill" style="border-radius:12px; height: 450px;">
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <span class="text-success fw-bold" style="font-size:15px">Export Inventory</span>
+        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 2h10v12H3z" stroke="#0F6E56" stroke-width="1.5"/>
+                <path d="M3 6h10M3 10h10" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
 <div class="px-2">
 <a href="?export=pdf&search=<?php echo urlencode($search); ?>&category=<?php echo urlencode($category); ?>&status=<?php echo urlencode($status); ?>" class="btn btn-danger w-100 mb-3">Export PDF</a>
 <a href="?export=excel&search=<?php echo urlencode($search); ?>&category=<?php echo urlencode($category); ?>&status=<?php echo urlencode($status); ?>" class="btn btn-success w-100 mb-3">Export Excel</a>

@@ -96,8 +96,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['save_notifications'])
 
 <!-- Change Password -->
 <div class="col-md-6">
-<div class="card shadow-sm p-4" style="height: 400px;">
-<h5 class="text-success fw-bold mb-3">Change Password</h5>
+<div class="card border-1 shadow-sm p-4" style="border-radius:12px; height: 400px;">
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-success fw-bold" style="font-size:15px">Change Password</span>
+        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <rect x="3" y="7" width="10" height="7" rx="1.5" stroke="#0F6E56" stroke-width="1.5"/>
+                <path d="M5 7V5a3 3 0 1 1 6 0v2" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
 
 <?php echo $message; ?>
 
@@ -128,8 +137,17 @@ Update Password
 
 <!-- Security & Notifications -->
 <div class="col-md-6">
-<div class="card shadow-sm p-4 d-flex flex-column" style="height: 400px;">
-<h5 class="text-success fw-bold mb-3">Security & Notifications</h5>
+<div class="card border-1 shadow-sm p-4 d-flex flex-column" style="border-radius:12px; height: 400px;">
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-success fw-bold" style="font-size:15px">Security & Notifications</span>
+        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <circle cx="8" cy="4" r="3" stroke="#0F6E56" stroke-width="1.5"/>
+                <path d="M2 14c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
 
 <form class="d-flex flex-column h-100">
 <div class="mb-4">

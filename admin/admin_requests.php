@@ -195,8 +195,17 @@ $result = $stmt->get_result();
 <h2 class="mb-4 text-success fw-bold">Request Management</h2>
 
 <div class="container mb-4">
-<div class="card shadow-sm p-3">
-<h5 class="text-success fw-bold mb-3">Filter Requests</h5>
+<div class="card border-1 shadow-sm p-3" style="border-radius:12px;">
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-success fw-bold" style="font-size:15px">Filter Requests</span>
+        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M6 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" stroke="#0F6E56" stroke-width="1.5"/>
+                <path d="M11 11l4 4" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
 <form method="GET" class="row g-3 align-items-center">
 <div class="col-md-3">
 <select name="status" class="form-select">
@@ -220,11 +229,20 @@ $result = $stmt->get_result();
 </div>
 
 <div class="container mb-4">
-<div class="card shadow-sm p-3">
-<h5 class="text-success fw-bold mb-3">Incoming Requests</h5>
+<div class="card border-1 shadow-sm p-3" style="border-radius:12px;">
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-success fw-bold" style="font-size:15px">Incoming Requests</span>
+        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <rect x="3" y="1.5" width="10" height="13" rx="1.5" stroke="#0F6E56" stroke-width="1.5"/>
+                <path d="M5.5 5.5h5M5.5 8h5M5.5 10.5h3" stroke="#0F6E56" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+        </div>
+    </div>
 
 <div style="max-height: 400px; overflow-y: auto;">
-<table class="table table-bordered table-hover align-middle text-center">
+<table class="table table-sm table-bordered table-hover align-middle text-center mb-0">
 <thead class="table-success" style="position: sticky; top: 0; z-index: 1;">
 <tr>
 <th>#</th>

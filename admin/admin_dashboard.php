@@ -101,7 +101,7 @@
   <div class="row g-3">
 
     <div class="col-6 col-md-3">
-      <div class="card border-0 shadow-sm h-100" style="border-radius:12px">
+      <div class="card border-1 shadow-sm h-100" style="border-radius:12px">
         <div class="card-body p-3">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span class="text-success fw-bold" style="font-size:13px">Total Users</span>
@@ -121,7 +121,7 @@
     </div>
 
     <div class="col-6 col-md-3">
-      <div class="card border-0 shadow-sm h-100" style="border-radius:12px">
+      <div class="card border-1 shadow-sm h-100" style="border-radius:12px">
         <div class="card-body p-3">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span  class="text-success fw-bold" style="font-size:13px">Pending Requests</span>
@@ -139,7 +139,7 @@
     </div>
 
     <div class="col-6 col-md-3">
-      <div class="card border-0 shadow-sm h-100" style="border-radius:12px">
+      <div class="card border-1 shadow-sm h-100" style="border-radius:12px">
         <div class="card-body p-3">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span  class="text-success fw-bold" style="font-size:13px">Low Stock</span>
@@ -158,7 +158,7 @@
     </div>
 
     <div class="col-6 col-md-3">
-      <div class="card border-0 shadow-sm h-100" style="border-radius:12px">
+      <div class="card border-1 shadow-sm h-100" style="border-radius:12px">
         <div class="card-body p-3">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <span  class="text-success fw-bold" style="font-size:13px">Reports</span>
@@ -182,9 +182,18 @@
     <div class="container mb-4">
         <div class="row g-3">
             <div class="col-md-12">
-                <div class="card shadow-sm p-3" style="max-height: 200px; overflow-y: auto;">
-                    <h5 class="text-success fw-bold text-start">Latest Request</h5>
-                    <table class="table table-sm table-bordered text-center mt-2">
+                <div class="card border-1 shadow-sm p-3" style="border-radius:12px; max-height: 250px; overflow-y: auto;">
+                    <!-- HEADER -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-success fw-bold" style="font-size:15px">Latest Request</span>
+                        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#FAEEDA">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <rect x="2" y="2" width="12" height="12" rx="2" stroke="#BA7517" stroke-width="1.5"/>
+                                <path d="M8 5v3.5l2 2" stroke="#BA7517" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <table class="table table-sm table-bordered text-center align-middle mb-0">
                         <thead class="table-success">
                             <tr>
                                 <th>Requested By</th>
@@ -196,7 +205,18 @@
                             <?php if ($latestRequest): ?>
                                 <tr>
                                     <td><?php echo htmlspecialchars($latestRequest['first_name'] . " " . $latestRequest['last_name']); ?></td>
-                                    <td><?php echo htmlspecialchars($latestRequest['status']); ?></td>
+                                    <td>
+                                        <?php
+                                        $status = $latestRequest['status'];
+                                        $badgeClass = 'bg-info';
+                                        if ($status === 'Pending') $badgeClass = 'bg-warning text-dark';
+                                        elseif ($status === 'Approved') $badgeClass = 'bg-success';
+                                        elseif ($status === 'Declined') $badgeClass = 'bg-danger';
+                                        elseif ($status === 'Cancelled') $badgeClass = 'bg-secondary';
+                                        elseif ($status === 'Completed') $badgeClass = 'bg-primary';
+                                        ?>
+                                        <span class="badge <?php echo $badgeClass; ?>"><?php echo htmlspecialchars($status); ?></span>
+                                    </td>
                                     <td><?php echo date("M d, Y", strtotime($latestRequest['request_date'])); ?></td>
                                 </tr>
                             <?php else: ?>
@@ -214,9 +234,18 @@
 
         <!-- URGENT REQUESTS -->
         <div class="col-md-6 d-flex">
-            <div class="card shadow-sm p-3 flex-fill d-flex flex-column" style="overflow-y: auto;">
-                <h5 class="text-success fw-bold text-start">Urgent Requests</h5>
-                <table class="table table-sm table-bordered text-center mt-2 mb-0">
+            <div class="card border-1 shadow-sm p-3 flex-fill d-flex flex-column" style="border-radius:12px; overflow-y: auto; max-height: 250px;">
+                <!-- HEADER -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-success fw-bold" style="font-size:15px">Urgent Requests</span>
+                    <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#FCEBEB">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M8 2L2 5v6l6 3 6-3V5L8 2z" stroke="#A32D2D" stroke-width="1.5" stroke-linejoin="round"/>
+                            <path d="M8 2v9M2 5l6 3 6-3" stroke="#A32D2D" stroke-width="1.5" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                </div>
+                <table class="table table-sm table-bordered text-center align-middle mb-0">
                     <thead class="table-success">
                         <tr>
                             <th>Requested By</th>
@@ -241,9 +270,18 @@
 
         <!-- TOP REQUESTED ITEMS -->
         <div class="col-md-6 d-flex">
-            <div class="card shadow-sm p-3 flex-fill d-flex flex-column" style="overflow-y: auto;">
-                <h5 class="text-success fw-bold text-start">Top Requested Items</h5>
-                <table class="table table-sm table-bordered text-center mt-2 mb-0">
+            <div class="card border-1 shadow-sm p-3 flex-fill d-flex flex-column" style="border-radius:12px; overflow-y: auto; max-height: 250px;">
+                <!-- HEADER -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-success fw-bold" style="font-size:15px">Top Requested Items</span>
+                    <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E6F1FB">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M8 2L2 5v6l6 3 6-3V5L8 2z" stroke="#185FA5" stroke-width="1.5" stroke-linejoin="round"/>
+                            <path d="M8 2v9M2 5l6 3 6-3" stroke="#185FA5" stroke-width="1.5" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                </div>
+                <table class="table table-sm table-bordered text-center align-middle mb-0">
                     <thead class="table-success">
                         <tr>
                             <th>Item Name</th>
@@ -275,17 +313,34 @@
 
         <!-- MONTHLY REQUEST TREND BAR GRAPH -->
         <div class="col-md-9 d-flex">
-            <div class="card shadow-sm p-3 flex-fill d-flex flex-column" style="overflow-y: auto; max-height: 300px;">
-                <h5 class="text-success fw-bold text-start">Monthly Request Trend</h5>
+            <div class="card border-1 shadow-sm p-3 flex-fill d-flex flex-column" style="border-radius:12px; overflow-y: auto; max-height: 300px;">
+                <!-- HEADER -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-success fw-bold" style="font-size:15px">Monthly Request Trend</span>
+                    <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M2 13h12M4 13V8m4 5V5m4 8V2" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                </div>
                 <canvas id="monthlyTrendChart" height="100"></canvas>
             </div>
         </div>
 
         <!-- GENERATE PDF REPORT -->
         <div class="col-md-3 d-flex">
-            <div class="card shadow-sm p-3 flex-fill d-flex flex-column justify-content-center text-center" style="overflow-y: auto; max-height: 300px;">
-                <h5 class="text-success fw-bold text-start">Generate PDF Report</h5>
-                <a href="admin_reports.php" class="btn btn-success mt-3">View Reports</a>
+            <div class="card border-1 shadow-sm p-3 flex-fill d-flex flex-column justify-content-center text-center" style="border-radius:12px; overflow-y: auto; max-height: 300px;">
+                <!-- HEADER -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-success fw-bold" style="font-size:15px">Reports</span>
+                    <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <rect x="3" y="1.5" width="10" height="13" rx="1.5" stroke="#0F6E56" stroke-width="1.5"/>
+                            <path d="M5.5 5.5h5M5.5 8h5M5.5 10.5h3" stroke="#0F6E56" stroke-width="1.3" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                </div>
+                <a href="admin_reports.php" class="btn btn-success mt-auto">View Reports</a>
             </div>
         </div>
 
@@ -296,9 +351,18 @@
     <div class="container mb-4">
         <div class="row g-3">
             <div class="col-md-12">
-                <div class="card shadow-sm p-3" style="max-height: 250px; overflow-y: auto;">
-                    <h5 class="text-success fw-bold text-start">Activity Logs</h5>
-                    <table class="table table-sm table-bordered text-center mt-2">
+                <div class="card border-1 shadow-sm p-3" style="border-radius:12px; max-height: 250px; overflow-y: auto;">
+                    <!-- HEADER -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-success fw-bold" style="font-size:15px">Activity Logs</span>
+                        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <rect x="3" y="1.5" width="10" height="13" rx="1.5" stroke="#0F6E56" stroke-width="1.5"/>
+                                <path d="M5.5 5.5h5M5.5 8h5M5.5 10.5h3" stroke="#0F6E56" stroke-width="1.3" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <table class="table table-sm table-bordered text-center align-middle mb-0">
                         <thead class="table-success">
                             <tr>
                                 <th>User</th>
@@ -311,7 +375,18 @@
                                 <?php foreach ($activityLogs as $log): ?>
                                     <tr>
                                         <td><?php echo htmlspecialchars($log['first_name'] . " " . $log['last_name']); ?></td>
-                                        <td><?php echo htmlspecialchars($log['action']); ?></td>
+                                        <td>
+                                            <?php
+                                            $action = $log['action'];
+                                            $badgeClass = 'bg-info';
+                                            if (strpos($action, 'Approved') !== false) $badgeClass = 'bg-success';
+                                            elseif (strpos($action, 'Declined') !== false) $badgeClass = 'bg-danger';
+                                            elseif (strpos($action, 'Cancelled') !== false) $badgeClass = 'bg-secondary';
+                                            elseif (strpos($action, 'Requested') !== false) $badgeClass = 'bg-warning text-dark';
+                                            elseif (strpos($action, 'Completed') !== false) $badgeClass = 'bg-primary';
+                                            ?>
+                                            <span class="badge <?php echo $badgeClass; ?>"><?php echo htmlspecialchars($action); ?></span>
+                                        </td>
                                         <td><?php echo date("M d, Y h:i A", strtotime($log['timestamp'])); ?></td>
                                     </tr>
                                 <?php endforeach; ?>

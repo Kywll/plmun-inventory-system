@@ -91,7 +91,7 @@ $logsQuery->close();
 
         <!-- Total Activities -->
         <div class="col-12 col-md-4 d-flex">
-            <div class="card border-0 shadow-sm flex-fill" style="border-radius:12px">
+            <div class="card border-1 shadow-sm flex-fill" style="border-radius:12px">
                 <div class="card-body p-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <span class="text-success fw-bold" style="font-size:13px">Total Activities</span>
@@ -112,7 +112,7 @@ $logsQuery->close();
 
         <!-- Request Made -->
         <div class="col-12 col-md-4 d-flex">
-            <div class="card border-0 shadow-sm flex-fill" style="border-radius:12px">
+            <div class="card border-1 shadow-sm flex-fill" style="border-radius:12px">
                 <div class="card-body p-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <span class="text-success fw-bold" style="font-size:13px">Request Made</span>
@@ -131,7 +131,7 @@ $logsQuery->close();
 
         <!-- Cancellations -->
         <div class="col-12 col-md-4 d-flex">
-            <div class="card border-0 shadow-sm flex-fill" style="border-radius:12px">
+            <div class="card border-1 shadow-sm flex-fill" style="border-radius:12px">
                 <div class="card-body p-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <span class="text-success fw-bold" style="font-size:13px">Cancellations</span>
@@ -152,79 +152,102 @@ $logsQuery->close();
 </div>
 
 <div class="container mb-4">
-<div class="card shadow-sm p-3">
-<h5 class="text-success fw-bold mb-3">Filter Activities</h5>
-<form method="GET" class="row g-3 align-items-center">
-<div class="col-md-4">
-<input type="date" name="start_date" class="form-control" value="<?php echo htmlspecialchars($startDate); ?>">
-</div>
-<div class="col-md-4">
-<input type="date" name="end_date" class="form-control" value="<?php echo htmlspecialchars($endDate); ?>">
-</div>
-<div class="col-md-4">
-<select name="activity_type" class="form-select">
-<option value="">Activity Type</option>
-<option value="Login" <?php if($activityType == 'Login') echo 'selected'; ?>>Login</option>
-<option value="Requested" <?php if($activityType == 'Requested') echo 'selected'; ?>>Request Submitted</option>
-<option value="Cancelled" <?php if($activityType == 'Cancelled') echo 'selected'; ?>>Request Cancelled</option>
-<option value="Password" <?php if($activityType == 'Password') echo 'selected'; ?>>Password Change</option>
-</select>
-</div>
-<div class="col-md-12 mt-3">
-<button type="submit" class="btn btn-success w-100">Apply Filter</button>
-</div>
-</form>
-</div>
+    <div class="card border-1 shadow-sm" style="border-radius:12px;">
+        <div class="card-body p-3">
+            <!-- HEADER -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-success fw-bold" style="font-size:15px">Filter Activities</span>
+                <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M6 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" stroke="#0F6E56" stroke-width="1.5"/>
+                        <path d="M11 11l4 4" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </div>
+            <form method="GET" class="row g-3 align-items-center">
+                <div class="col-md-4">
+                    <input type="date" name="start_date" class="form-control" value="<?php echo htmlspecialchars($startDate); ?>">
+                </div>
+                <div class="col-md-4">
+                    <input type="date" name="end_date" class="form-control" value="<?php echo htmlspecialchars($endDate); ?>">
+                </div>
+                <div class="col-md-4">
+                    <select name="activity_type" class="form-select">
+                        <option value="">Activity Type</option>
+                        <option value="Login" <?php if($activityType == 'Login') echo 'selected'; ?>>Login</option>
+                        <option value="Requested" <?php if($activityType == 'Requested') echo 'selected'; ?>>Request Submitted</option>
+                        <option value="Cancelled" <?php if($activityType == 'Cancelled') echo 'selected'; ?>>Request Cancelled</option>
+                        <option value="Password" <?php if($activityType == 'Password') echo 'selected'; ?>>Password Change</option>
+                    </select>
+                </div>
+                <div class="col-md-12 mt-3">
+                    <button type="submit" class="btn btn-success w-100">Apply Filter</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 <div class="container mb-4">
-<div class="card shadow-sm p-3">
-<h5 class="text-success fw-bold mb-3">Activity History</h5>
+    <div class="card border-1 shadow-sm" style="border-radius:12px;">
+        <div class="card-body p-3 d-flex flex-column">
+            <!-- HEADER -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-success fw-bold" style="font-size:15px">Activity History</span>
+                <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <rect x="3" y="1.5" width="10" height="13" rx="1.5" stroke="#0F6E56" stroke-width="1.5"/>
+                        <path d="M5.5 5.5h5M5.5 8h5M5.5 10.5h3" stroke="#0F6E56" stroke-width="1.3" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </div>
 
-<div style="max-height: 400px; overflow-y: auto;">
-<table class="table table-bordered table-hover text-center align-middle">
-<thead class="table-success" style="position: sticky; top: 0; z-index: 1;">
-<tr>
-<th>#</th>
-<th>Activity</th>
-<th>Description</th>
-<th>Status</th>
-<th>Date & Time</th>
-</tr>
-</thead>
-<tbody>
-
-<?php if (empty($logs)): ?>
-<tr><td colspan="5">No activity found.</td></tr>
-<?php else: ?>
-<?php foreach ($logs as $index => $log): ?>
-<tr>
-<td><?php echo $index + 1; ?></td>
-<td><?php echo htmlspecialchars($log['action']); ?></td>
-<td><?php echo htmlspecialchars($log['remarks']); ?></td>
-<td>
-<?php
-if (strpos($log['action'], 'Approved') !== false) {
-    echo '<span class="badge bg-success">Approved</span>';
-} elseif (strpos($log['action'], 'Cancelled') !== false) {
-    echo '<span class="badge bg-danger">Cancelled</span>';
-} elseif (strpos($log['action'], 'Requested') !== false) {
-    echo '<span class="badge bg-warning text-dark">Pending</span>';
-} else {
-    echo '<span class="badge bg-info">Info</span>';
-}
-?>
-</td>
-<td><?php echo date("M d, Y - h:i A", strtotime($log['timestamp'])); ?></td>
-</tr>
-<?php endforeach; ?>
-<?php endif; ?>
-
-</tbody>
-</table>
-</div>
-
-</div>
+            <div style="max-height: 400px; overflow-y: auto;">
+                <table class="table table-sm table-bordered table-hover text-center align-middle mb-0">
+                    <thead class="table-success" style="position: sticky; top: 0; z-index: 1;">
+                        <tr>
+                            <th>#</th>
+                            <th>Activity</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Date & Time</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (empty($logs)): ?>
+                            <tr><td colspan="5">No activity found.</td></tr>
+                        <?php else: ?>
+                            <?php foreach ($logs as $index => $log): ?>
+                                <tr>
+                                    <td><?php echo $index + 1; ?></td>
+                                    <td><?php echo htmlspecialchars($log['action']); ?></td>
+                                    <td><?php echo htmlspecialchars($log['remarks']); ?></td>
+                                    <td>
+                                        <?php
+                                        if (strpos($log['action'], 'Approved') !== false) {
+                                            echo '<span class="badge bg-success">Approved</span>';
+                                        } elseif (strpos($log['action'], 'Declined') !== false) {
+                                            echo '<span class="badge bg-danger">Declined</span>';
+                                        } elseif (strpos($log['action'], 'Cancelled') !== false) {
+                                            echo '<span class="badge bg-secondary">Cancelled</span>';
+                                        } elseif (strpos($log['action'], 'Requested') !== false) {
+                                            echo '<span class="badge bg-warning text-dark">Pending</span>';
+                                        } elseif (strpos($log['action'], 'Completed') !== false) {
+                                            echo '<span class="badge bg-primary">Completed</span>';
+                                        } else {
+                                            echo '<span class="badge bg-info">Info</span>';
+                                        }
+                                        ?>
+                                    </td>
+                                    <td><?php echo date("M d, Y - h:i A", strtotime($log['timestamp'])); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 

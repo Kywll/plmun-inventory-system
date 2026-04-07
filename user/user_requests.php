@@ -171,103 +171,173 @@ $listStmt->close();
 <?php endif; ?>
 
 <div class="container mb-4">
-<div class="card shadow-sm p-3">
-<h5 class="text-success fw-bold mb-3">Track Your Requests</h5>
-<div style="max-height: 400px; overflow-y: auto;">
-<table class="table table-bordered table-hover align-middle text-center">
-<thead class="table-success" style="position: sticky; top: 0; z-index: 1;">
-<tr>
-<th>#</th>
-<th>Request</th>
-<th>Status</th>
-<th>Submitted On</th>
-<th>Actions</th>
-</tr>
-</thead>
-<tbody>
-<?php if (empty($requests)): ?>
-<tr><td colspan="5">No requests found</td></tr>
-<?php else: ?>
-<?php foreach ($requests as $index => $req): ?>
-<tr>
-<td><?php echo $index + 1; ?></td>
-<td><?php echo htmlspecialchars($req['item_name']); ?></td>
-<td><?php echo htmlspecialchars($req['status']); ?></td>
-<td><?php echo $req['request_date']; ?></td>
-<td>
-<?php if ($req['status'] === 'Pending'): ?>
-<a href="?cancel=<?php echo $req['request_id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Cancel this request?')">Cancel</a>
-<?php else: ?>
-<button class="btn btn-sm btn-secondary" disabled>Cancel</button>
-<?php endif; ?>
-</td>
-</tr>
-<?php endforeach; ?>
-<?php endif; ?>
-</tbody>
-</table>
-</div>
-</div>
+    <div class="row g-3">
+
+        <!-- SUBMIT NEW REQUEST -->
+        <div class="col-md-7 d-flex">
+            <div class="card border-1 shadow-sm flex-fill" style="border-radius:12px; height:350px;">
+                <div class="card-body p-4 d-flex flex-column">
+
+                    <!-- HEADER -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-success fw-bold" style="font-size:15px">Submit New Request</span>
+                        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M2 2h12v12H2V2z" stroke="#0F6E56" stroke-width="1.5"/>
+                                <path d="M4 8h8M8 4v8" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- FORM -->
+                    <form method="POST" class="flex-fill d-flex flex-column">
+                        <div class="col-md-12 mb-3">
+                            <input type="text" name="item_name" class="form-control" placeholder="Item / Facility Name" required>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <select name="urgency" class="form-select" required>
+                                <option value="">Urgency Level</option>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <textarea name="notes" class="form-control" placeholder="Additional Notes (optional)"></textarea>
+                        </div>
+
+                        <div class="col-md-12 mt-auto">
+                            <button type="submit" class="btn btn-success w-100">Submit Request</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- FILTER REQUESTS -->
+        <div class="col-md-5 d-flex">
+            <div class="card border-1 shadow-sm flex-fill" style="border-radius:12px; height:350px;">
+                <div class="card-body p-4 d-flex flex-column">
+
+                    <!-- HEADER -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-success fw-bold" style="font-size:15px">Filter Requests</span>
+                        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M2 4h12M6 8h4M4 12h8" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- FORM -->
+                    <form method="GET" class="flex-fill d-flex flex-column">
+                        <div class="mb-2">
+                            <select name="status" class="form-select">
+                                <option value="">Status</option>
+                                <option value="Pending" <?php if($statusFilter == 'Pending') echo 'selected'; ?>>Pending</option>
+                                <option value="Approved" <?php if($statusFilter == 'Approved') echo 'selected'; ?>>Approved</option>
+                                <option value="Declined" <?php if($statusFilter == 'Declined') echo 'selected'; ?>>Declined</option>
+                                <option value="Cancelled" <?php if($statusFilter == 'Cancelled') echo 'selected'; ?>>Cancelled</option>
+                                <option value="Completed" <?php if($statusFilter == 'Completed') echo 'selected'; ?>>Completed</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-2">
+                            <input type="date" name="start_date" class="form-control" value="<?php echo htmlspecialchars($startDate); ?>">
+                        </div>
+                        <div class="mb-2">
+                            <input type="date" name="end_date" class="form-control" value="<?php echo htmlspecialchars($endDate); ?>">
+                        </div>
+
+                        <div class="mt-auto">
+                            <button type="submit" class="btn btn-success w-100 mt-4">Apply Filter</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
+<!-- TRACK YOUR REQUESTS -->
 <div class="container mb-4">
-<div class="row g-3">
-<div class="col-md-7">
-<div class="card shadow-sm p-4" style="height: 350px;">
-<h5 class="text-success fw-bold mb-3">Submit New Request</h5>
-<form method="POST">
-<div class="col-md-12 mb-3">
-<input type="text" name="item_name" class="form-control" placeholder="Item / Facility Name" required>
+    <div class="row g-3">
+
+        <div class="col-md-12 d-flex">
+            <div class="card border-1 shadow-sm flex-fill" style="border-radius:12px;">
+                
+                <div class="card-body p-3 d-flex flex-column">
+
+                    <!-- HEADER -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-success fw-bold" style="font-size:15px">Track Your Requests</span>
+                        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <rect x="3" y="1.5" width="10" height="13" rx="1.5" stroke="#0F6E56" stroke-width="1.5"/>
+                                <path d="M5.5 5.5h5M5.5 8h5M5.5 10.5h3" stroke="#0F6E56" stroke-width="1.3" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- TABLE -->
+                    <div style="max-height: 400px; overflow-y: auto;">
+                        <table class="table table-sm table-bordered table-hover align-middle text-center mb-0">
+                            <thead class="table-success" style="position: sticky; top: 0; z-index: 1;">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Request</th>
+                                    <th>Status</th>
+                                    <th>Submitted On</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (empty($requests)): ?>
+                                    <tr><td colspan="5">No requests found</td></tr>
+                                <?php else: ?>
+                                    <?php foreach ($requests as $index => $req): ?>
+                                        <tr>
+                                            <td><?php echo $index + 1; ?></td>
+                                            <td><?php echo htmlspecialchars($req['item_name']); ?></td>
+                                            <td>
+                                                <?php
+                                                $status = $req['status'];
+                                                $badgeClass = 'bg-info';
+                                                if ($status === 'Pending') $badgeClass = 'bg-warning text-dark';
+                                                elseif ($status === 'Approved') $badgeClass = 'bg-success';
+                                                elseif ($status === 'Declined') $badgeClass = 'bg-danger';
+                                                elseif ($status === 'Cancelled') $badgeClass = 'bg-secondary';
+                                                elseif ($status === 'Completed') $badgeClass = 'bg-primary';
+                                                ?>
+                                                <span class="badge <?php echo $badgeClass; ?>"><?php echo htmlspecialchars($status); ?></span>
+                                            </td>
+                                            <td><?php echo $req['request_date']; ?></td>
+                                            <td>
+                                                <?php if ($req['status'] === 'Pending'): ?>
+                                                    <a href="?cancel=<?php echo $req['request_id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Cancel this request?')">Cancel</a>
+                                                <?php else: ?>
+                                                    <button class="btn btn-sm btn-secondary" disabled>Cancel</button>
+                                                <?php endif; ?>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
-<div class="col-md-12 mb-3">
-<select name="urgency" class="form-select" required>
-<option value="">Urgency Level</option>
-<option value="Low">Low</option>
-<option value="Medium">Medium</option>
-<option value="High">High</option>
-</select>
-</div>
-
-<div class="col-md-12 mb-3">
-<textarea name="notes" class="form-control" placeholder="Additional Notes (optional)"></textarea>
-</div>
-
-<div class="col-md-12">
-<button type="submit" class="btn btn-success w-100">Submit Request</button>
-</div>
-</form>
-</div>
-</div>
-
-<div class="col-md-5">
-<div class="card shadow-sm p-4" style="height: 350px;">
-<h5 class="text-success fw-bold mb-3">Filter Requests</h5>
-<form method="GET">
-<div class="mb-2">
-<select name="status" class="form-select">
-<option value="">Status</option>
-<option value="Pending" <?php if($statusFilter == 'Pending') echo 'selected'; ?>>Pending</option>
-<option value="Approved" <?php if($statusFilter == 'Approved') echo 'selected'; ?>>Approved</option>
-<option value="Declined" <?php if($statusFilter == 'Declined') echo 'selected'; ?>>Declined</option>
-<option value="Cancelled" <?php if($statusFilter == 'Cancelled') echo 'selected'; ?>>Cancelled</option>
-<option value="Completed" <?php if($statusFilter == 'Completed') echo 'selected'; ?>>Completed</option>
-</select>
-</div>
-<div class="mb-2">
-<input type="date" name="start_date" class="form-control" value="<?php echo htmlspecialchars($startDate); ?>">
-</div>
-<div class="mb-2">
-<input type="date" name="end_date" class="form-control" value="<?php echo htmlspecialchars($endDate); ?>">
-</div>
-<div class="mt-auto">
-<button type="submit" class="btn btn-success w-100 mt-4">Apply Filter</button>
-</div>
-</form>
-</div>
-</div>
-</div>
-</div>
 
 </main>
 </div>

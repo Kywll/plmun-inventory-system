@@ -166,112 +166,156 @@ while ($row = $supResult->fetch_assoc()) {
 
 <main class="flex-grow-1 p-4" style="margin-left: 250px; height: 100vh; overflow-y: auto;">
 <h2 class="mb-4 text-success fw-bold">Inventory</h2>
+<!-- FILTER / SEARCH INVENTORY -->
 <div class="container mb-4">
-<div class="card shadow-sm p-3">
-<h5 class="text-success fw-bold mb-3">Filter / Search Inventory</h5>
-<form method="GET" class="row g-3 align-items-center">
+    <div class="row g-3">
+        <div class="col-md-12 d-flex">
+            <div class="card border-1 shadow-sm flex-fill" style="border-radius:12px;">
+                <div class="card-body p-3">
 
-<div class="col-md-4">
-<input type="text" name="search" class="form-control"
-placeholder="Search by Item Name"
-value="<?php echo htmlspecialchars($search); ?>">
+                    <!-- HEADER -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-success fw-bold" style="font-size:15px">Filter / Search Inventory</span>
+                        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M6 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" stroke="#0F6E56" stroke-width="1.5"/>
+                                <path d="M11 11l4 4" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- FORM -->
+                    <form method="GET" class="row g-3 align-items-center">
+                        <div class="col-md-4">
+                            <input type="text" name="search" class="form-control" placeholder="Search by Item Name" value="<?php echo htmlspecialchars($search); ?>">
+                        </div>
+
+                        <div class="col-md-4">
+                            <select name="category" class="form-select">
+                                <option value="">Category</option>
+                                <?php foreach ($categories as $cat): ?>
+                                <option value="<?php echo htmlspecialchars($cat); ?>" <?php if ($category === $cat) echo "selected"; ?>>
+                                    <?php echo htmlspecialchars($cat); ?>
+                                </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <select name="supplier" class="form-select">
+                                <option value="">Supplier</option>
+                                <?php foreach ($suppliers as $sup): ?>
+                                <option value="<?php echo htmlspecialchars($sup); ?>" <?php if ($supplier === $sup) echo "selected"; ?>>
+                                    <?php echo htmlspecialchars($sup); ?>
+                                </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="col-md-1">
+                            <button type="submit" class="btn btn-success w-100"><i class="bi bi-search"></i></button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="col-md-4">
-<select name="category" class="form-select">
-<option value="">Category</option>
-<?php foreach ($categories as $cat): ?>
-<option value="<?php echo htmlspecialchars($cat); ?>"
-<?php if ($category === $cat) echo "selected"; ?>>
-<?php echo htmlspecialchars($cat); ?>
-</option>
-<?php endforeach; ?>
-</select>
-</div>
-
-<div class="col-md-3">
-<select name="supplier" class="form-select">
-<option value="">Supplier</option>
-<?php foreach ($suppliers as $sup): ?>
-<option value="<?php echo htmlspecialchars($sup); ?>"
-<?php if ($supplier === $sup) echo "selected"; ?>>
-<?php echo htmlspecialchars($sup); ?>
-</option>
-<?php endforeach; ?>
-</select>
-</div>
-
-<div class="col-md-1">
-<button type="submit" class="btn btn-success w-100"><i class="bi bi-search"></i></button>
-</div>
-
-</form>
-</div>
-</div>
-
-<!-- TABLE -->
+<!-- TABLE & EXPORT -->
 <div class="container mb-4">
-<div class="row g-3">
-<div class="col-md-9">
-<div class="card shadow-sm p-3" style="height: 450px;">
-<h5 class="text-success fw-bold mb-3">Available Items</h5>
-<div style="max-height: 380px; overflow-y: auto;">
-<table class="table table-bordered table-hover align-middle text-center">
-<thead class="table-success" style="position: sticky; top: 0; z-index: 1;">
-<tr>
-<th>#</th>
-<th>Item Name</th>
-<th>Category</th>
-<th>Supplier</th>
-<th>Available Quantity</th>
-<th>Low Stock</th>
-</tr>
-</thead>
-<tbody>
+    <div class="row g-3">
 
-<?php if (empty($items)): ?>
-<tr><td colspan="6">No items found</td></tr>
-<?php else: ?>
-<?php foreach ($items as $index => $item): ?>
-<tr>
-<td><?php echo $index + 1; ?></td>
-<td><?php echo htmlspecialchars($item['item_name']); ?></td>
-<td><?php echo htmlspecialchars($item['category']); ?></td>
-<td><?php echo htmlspecialchars($item['supplier_name']); ?></td>
-<td><?php echo $item['stock']; ?></td>
-<td>
-<?php
-if ($item['stock'] <= 0) {
-    echo '<span class="badge bg-danger">Out of Stock</span>';
-} elseif ($item['stock'] <= $item['low_stock_threshold']) {
-    echo '<span class="badge bg-warning text-dark">Low Stock</span>';
-} else {
-    echo '<span class="badge bg-success">OK</span>';
-}
-?>
-</td>
-</tr>
-<?php endforeach; ?>
-<?php endif; ?>
+        <!-- AVAILABLE ITEMS TABLE -->
+        <div class="col-md-9 d-flex">
+            <div class="card border-1 shadow-sm flex-fill" style="border-radius:12px; height:450px;">
+                <div class="card-body p-3 d-flex flex-column">
 
-</tbody>
-</table>
-</div>
-</div>
-</div>
+                    <!-- HEADER -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-success fw-bold" style="font-size:15px">Available Items</span>
+                        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M8 2L2 5v6l6 3 6-3V5L8 2z" stroke="#0F6E56" stroke-width="1.5" stroke-linejoin="round"/>
+                                <path d="M8 2v9M2 5l6 3 6-3" stroke="#0F6E56" stroke-width="1.5" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
 
-<div class="col-md-3">
-<div class="card shadow-sm p-3 text-center d-flex flex-column justify-content-center" style="height: 450px;">
-<h5 class="text-success fw-bold mb-4">Export Inventory</h5>
-<div class="px-2">
-<a href="?export=pdf&search=<?php echo urlencode($search); ?>&category=<?php echo urlencode($category); ?>&supplier=<?php echo urlencode($supplier); ?>" class="btn btn-danger m-1 w-100 mb-3">Export PDF</a>
-<a href="?export=excel&search=<?php echo urlencode($search); ?>&category=<?php echo urlencode($category); ?>&supplier=<?php echo urlencode($supplier); ?>" class="btn btn-success m-1 w-100 mb-3">Export Excel</a>
-<a href="?export=csv&search=<?php echo urlencode($search); ?>&category=<?php echo urlencode($category); ?>&supplier=<?php echo urlencode($supplier); ?>" class="btn btn-primary m-1 w-100">Export CSV</a>
-</div>
-</div>
-</div>
-</div>
-</div>
+                    <!-- TABLE -->
+                    <div style="max-height:380px; overflow-y:auto;">
+                        <table class="table table-sm table-bordered text-center align-middle mb-0">
+                            <thead class="table-success" style="position: sticky; top: 0; z-index: 1;">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Item Name</th>
+                                    <th>Category</th>
+                                    <th>Supplier</th>
+                                    <th>Available Quantity</th>
+                                    <th>Low Stock</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php if (empty($items)): ?>
+                                <tr><td colspan="6">No items found</td></tr>
+                                <?php else: ?>
+                                <?php foreach ($items as $index => $item): ?>
+                                <tr>
+                                    <td><?php echo $index + 1; ?></td>
+                                    <td><?php echo htmlspecialchars($item['item_name']); ?></td>
+                                    <td><?php echo htmlspecialchars($item['category']); ?></td>
+                                    <td><?php echo htmlspecialchars($item['supplier_name']); ?></td>
+                                    <td><?php echo $item['stock']; ?></td>
+                                    <td>
+                                        <?php
+                                        if ($item['stock'] <= 0) {
+                                            echo '<span class="badge bg-danger">Out of Stock</span>';
+                                        } elseif ($item['stock'] <= $item['low_stock_threshold']) {
+                                            echo '<span class="badge bg-warning text-dark">Low Stock</span>';
+                                        } else {
+                                            echo '<span class="badge bg-success">OK</span>';
+                                        }
+                                        ?>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- EXPORT -->
+        <div class="col-md-3 d-flex">
+            <div class="card border-1 shadow-sm flex-fill text-center d-flex flex-column justify-content-center" style="border-radius:12px; height:450px;">
+                <div class="card-body p-3">
+                    <!-- HEADER -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <span class="text-success fw-bold" style="font-size:15px">Export Inventory</span>
+                        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M3 2h10v12H3z" stroke="#0F6E56" stroke-width="1.5"/>
+                                <path d="M3 6h10M3 10h10" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="px-2 d-flex flex-column">
+                        <a href="?export=pdf&search=<?php echo urlencode($search); ?>&category=<?php echo urlencode($category); ?>&supplier=<?php echo urlencode($supplier); ?>" class="btn btn-danger m-1 w-100 mb-3">Export PDF</a>
+                        <a href="?export=excel&search=<?php echo urlencode($search); ?>&category=<?php echo urlencode($category); ?>&supplier=<?php echo urlencode($supplier); ?>" class="btn btn-success m-1 w-100 mb-3">Export Excel</a>
+                        <a href="?export=csv&search=<?php echo urlencode($search); ?>&category=<?php echo urlencode($category); ?>&supplier=<?php echo urlencode($supplier); ?>" class="btn btn-primary m-1 w-100">Export CSV</a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>  
 
 
 </main>

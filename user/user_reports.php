@@ -245,16 +245,16 @@ $result = $stmt->get_result();
 
         <!-- Total -->
         <div class="col-12 col-md-3 d-flex">
-            <div class="card border-0 shadow-sm flex-fill" style="border-radius:12px">
+            <div class="card border-1 shadow-sm flex-fill" style="border-radius:12px">
                 <div class="card-body p-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <span class="text-success fw-bold" style="font-size:13px">Total</span>
-                        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E6F1FB">
+                        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <circle cx="6" cy="5" r="2.5" stroke="#185FA5" stroke-width="1.5"/>
-                                <path d="M1.5 13.5c0-2.485 2.015-4.5 4.5-4.5s4.5 2.015 4.5 4.5" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round"/>
-                                <circle cx="11.5" cy="5.5" r="2" stroke="#185FA5" stroke-width="1.3"/>
-                                <path d="M14 13c0-1.657-1.12-3.07-2.672-3.43" stroke="#185FA5" stroke-width="1.3"/>
+                                <circle cx="6" cy="5" r="2.5" stroke="#0F6E56" stroke-width="1.5"/>
+                                <path d="M1.5 13.5c0-2.485 2.015-4.5 4.5-4.5s4.5 2.015 4.5 4.5" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
+                                <circle cx="11.5" cy="5.5" r="2" stroke="#0F6E56" stroke-width="1.3"/>
+                                <path d="M14 13c0-1.657-1.12-3.07-2.672-3.43" stroke="#0F6E56" stroke-width="1.3"/>
                             </svg>
                         </div>
                     </div>
@@ -266,7 +266,7 @@ $result = $stmt->get_result();
 
         <!-- Pending -->
         <div class="col-12 col-md-3 d-flex">
-            <div class="card border-0 shadow-sm flex-fill" style="border-radius:12px">
+            <div class="card border-1 shadow-sm flex-fill" style="border-radius:12px">
                 <div class="card-body p-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <span class="text-success fw-bold" style="font-size:13px">Pending</span>
@@ -285,7 +285,7 @@ $result = $stmt->get_result();
 
         <!-- Approved -->
         <div class="col-12 col-md-3 d-flex">
-            <div class="card border-0 shadow-sm flex-fill" style="border-radius:12px">
+            <div class="card border-1 shadow-sm flex-fill" style="border-radius:12px">
                 <div class="card-body p-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <span class="text-success fw-bold" style="font-size:13px">Approved</span>
@@ -303,7 +303,7 @@ $result = $stmt->get_result();
 
         <!-- Declined -->
         <div class="col-12 col-md-3 d-flex">
-            <div class="card border-0 shadow-sm flex-fill" style="border-radius:12px">
+            <div class="card border-1 shadow-sm flex-fill" style="border-radius:12px">
                 <div class="card-body p-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <span class="text-success fw-bold" style="font-size:13px">Declined</span>
@@ -325,74 +325,115 @@ $result = $stmt->get_result();
 
 <!-- FILTER + EXPORT -->
 <div class="container mb-4">
-<div class="row g-3">
+    <div class="row g-3">
 
-<div class="col-md-8">
-<div class="card shadow-sm p-3" style="height: 200px;">
-<h5 class="text-success fw-bold mb-3">Filter Reports</h5>
-<form method="GET">
-<div class="row">
-<div class="col-md-6">
-<input type="date" name="start_date" value="<?php echo $startDate; ?>" class="form-control mb-2">
-</div>
-<div class="col-md-6">
-<input type="date" name="end_date" value="<?php echo $endDate; ?>" class="form-control mb-2">
-</div>
-</div>
-<button class="btn btn-success w-100 mt-2">Apply Filter</button>
-</form>
-</div>
-</div>
+        <div class="col-md-8 d-flex">
+            <div class="card border-1 shadow-sm flex-fill" style="border-radius:12px;">
+                <div class="card-body p-3">
+                    <!-- HEADER -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-success fw-bold" style="font-size:15px">Filter Reports</span>
+                        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M6 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8z" stroke="#0F6E56" stroke-width="1.5"/>
+                                <path d="M11 11l4 4" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <form method="GET">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <input type="date" name="start_date" value="<?php echo $startDate; ?>" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="date" name="end_date" value="<?php echo $endDate; ?>" class="form-control">
+                            </div>
+                        </div>
+                        <button class="btn btn-success w-100 mt-3">Apply Filter</button>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-<div class="col-md-4">
-<div class="card shadow-sm p-3 text-center" style="height: 200px;">
-<h5 class="text-success fw-bold mb-3">Export Reports</h5>
+        <div class="col-md-4 d-flex">
+            <div class="card border-1 shadow-sm flex-fill text-center d-flex flex-column justify-content-center" style="border-radius:12px;">
+                <div class="card-body p-3">
+                    <!-- HEADER -->
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="text-success fw-bold" style="font-size:15px">Export Reports</span>
+                        <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M3 2h10v12H3z" stroke="#0F6E56" stroke-width="1.5"/>
+                                <path d="M3 6h10M3 10h10" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column">
+                        <a href="?export=pdf&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>" class="btn btn-danger w-100 mb-2 btn-sm">Export PDF</a>
+                        <a href="?export=excel&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>" class="btn btn-success w-100 mb-2 btn-sm">Export Excel</a>
+                        <a href="?export=csv&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>" class="btn btn-primary w-100 btn-sm">Export CSV</a>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<a href="?export=pdf&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>" class="btn btn-danger w-100 mb-2 btn-sm">Export PDF</a>
-<a href="?export=excel&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>" class="btn btn-success w-100 mb-2 btn-sm">Export Excel</a>
-<a href="?export=csv&start_date=<?php echo $startDate; ?>&end_date=<?php echo $endDate; ?>" class="btn btn-primary w-100 btn-sm">Export CSV</a>
-
-</div>
-</div>
-
-</div>
+    </div>
 </div>
 
 <div class="container mb-4">
-<div class="card shadow-sm p-3">
-<h5 class="text-success fw-bold mb-3">Request Reports</h5>
+    <div class="card border-1 shadow-sm" style="border-radius:12px;">
+        <div class="card-body p-3 d-flex flex-column">
+            <!-- HEADER -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-success fw-bold" style="font-size:15px">Request Reports</span>
+                <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <rect x="3" y="1.5" width="10" height="13" rx="1.5" stroke="#0F6E56" stroke-width="1.5"/>
+                        <path d="M5.5 5.5h5M5.5 8h5M5.5 10.5h3" stroke="#0F6E56" stroke-width="1.3" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </div>
 
-<div style="max-height: 400px; overflow-y: auto;">
-<table class="table table-bordered table-hover text-center align-middle">
-<thead class="table-success" style="position: sticky; top: 0; z-index: 1;">
-<tr>
-<th>#</th>
-<th>Item</th>
-<th>Quantity</th>
-<th>Status</th>
-<th>Date</th>
-</tr>
-</thead>
-
-<tbody>
-<?php $count=1; while ($row = $result->fetch_assoc()): ?>
-<tr>
-<td><?php echo $count++; ?></td>
-<td><?php echo htmlspecialchars($row['item_name'] ?? 'N/A'); ?></td>
-<td><?php echo htmlspecialchars($row['quantity'] ?? 0); ?></td>
-<td><?php echo $row['status']; ?></td>
-<td><?php echo date("M d, Y", strtotime($row['request_date'])); ?></td>
-</tr>
-<?php endwhile; ?>
-
-<?php if ($result->num_rows === 0): ?>
-<tr><td colspan="5">No data found</td></tr>
-<?php endif; ?>
-</tbody>
-
-</table>
-</div>
-</div>
+            <div style="max-height: 400px; overflow-y: auto;">
+                <table class="table table-sm table-bordered table-hover text-center align-middle mb-0">
+                    <thead class="table-success" style="position: sticky; top: 0; z-index: 1;">
+                        <tr>
+                            <th>#</th>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $count=1; while ($row = $result->fetch_assoc()): ?>
+                            <tr>
+                                <td><?php echo $count++; ?></td>
+                                <td><?php echo htmlspecialchars($row['item_name'] ?? 'N/A'); ?></td>
+                                <td><?php echo htmlspecialchars($row['quantity'] ?? 0); ?></td>
+                                <td>
+                                    <?php
+                                    $status = $row['status'] ?? '';
+                                    $badgeClass = 'bg-info';
+                                    if ($status === 'Pending') $badgeClass = 'bg-warning text-dark';
+                                    elseif ($status === 'Approved') $badgeClass = 'bg-success';
+                                    elseif ($status === 'Declined') $badgeClass = 'bg-danger';
+                                    elseif ($status === 'Cancelled') $badgeClass = 'bg-secondary';
+                                    elseif ($status === 'Completed') $badgeClass = 'bg-primary';
+                                    ?>
+                                    <span class="badge <?php echo $badgeClass; ?>"><?php echo htmlspecialchars($status); ?></span>
+                                </td>
+                                <td><?php echo date("M d, Y", strtotime($row['request_date'])); ?></td>
+                            </tr>
+                        <?php endwhile; ?>
+                        <?php if ($result->num_rows === 0): ?>
+                            <tr><td colspan="5">No data found</td></tr>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 
