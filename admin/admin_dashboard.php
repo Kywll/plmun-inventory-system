@@ -61,19 +61,60 @@
         $topRequested[] = $row;
     }
 
-    // ================= MONTHLY REQUEST TREND =================
-    $monthlyTrend = $conn->query("
-        SELECT DATE_FORMAT(request_date, '%Y-%m') as month, COUNT(*) as total
-        FROM requests
-        GROUP BY month
+    // ================= REQUEST TREND BY DEPARTMENT (LAST 6 MONTHS) =================
+    // 1. Get the last 6 months
+    $months = [];
+    for ($i = 5; $i >= 0; $i--) {
+        $months[] = date('Y-m', strtotime("-$i months"));
+    }
+
+    // 2. Get all departments
+    $deptsResult = $conn->query("SELECT DISTINCT department FROM users WHERE department IS NOT NULL AND department != ''");
+    $allDepts = [];
+    while($row = $deptsResult->fetch_assoc()) {
+        $allDepts[] = $row['department'];
+    }
+
+    // 3. Fetch data grouped by month and department
+    $deptTrendData = $conn->query("
+        SELECT 
+            DATE_FORMAT(r.request_date, '%Y-%m') as month, 
+            u.department, 
+            SUM(ri.quantity) as total_items
+        FROM request_items ri
+        JOIN requests r ON ri.request_id = r.request_id
+        JOIN users u ON r.user_id = u.user_id
+        WHERE r.request_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+        GROUP BY month, u.department
         ORDER BY month ASC
-        LIMIT 6
     ");
-    $trendLabels = [];
-    $trendTotals = [];
-    while ($row = $monthlyTrend->fetch_assoc()) {
-        $trendLabels[] = $row['month'];
-        $trendTotals[] = $row['total'];
+
+    // 4. Structure the data for Chart.js
+    // Initialize structure: [DeptName => [Month1 => 0, Month2 => 0, ...]]
+    $structuredData = [];
+    foreach ($allDepts as $dept) {
+        $structuredData[$dept] = array_fill_keys($months, 0);
+    }
+
+    while ($row = $deptTrendData->fetch_assoc()) {
+        if (isset($structuredData[$row['department']][$row['month']])) {
+            $structuredData[$row['department']][$row['month']] = (int)$row['total_items'];
+        }
+    }
+
+    // Convert to Chart.js Datasets format
+    $chartDatasets = [];
+    $colors = ['#198754', '#185FA5', '#BA7517', '#A32D2D', '#6c757d', '#0dcaf0'];
+    $colorIdx = 0;
+
+    foreach ($structuredData as $deptName => $monthlyValues) {
+        $chartDatasets[] = [
+            'label' => $deptName,
+            'data' => array_values($monthlyValues),
+            'backgroundColor' => $colors[$colorIdx % count($colors)],
+            'borderRadius' => 5
+        ];
+        $colorIdx++;
     }
 
     // ================= ACTIVITY LOGS =================
@@ -311,19 +352,21 @@
 <div class="container mb-4">
     <div class="row g-3 align-items-stretch">
 
-        <!-- MONTHLY REQUEST TREND BAR GRAPH -->
+        <!-- REQUESTS BY DEPARTMENT STACKED BAR CHART -->
         <div class="col-md-9 d-flex">
-            <div class="card border-1 shadow-sm p-3 flex-fill d-flex flex-column" style="border-radius:12px; overflow-y: auto; max-height: 300px;">
+            <div class="card border-1 shadow-sm p-3 flex-fill d-flex flex-column" style="border-radius:12px; overflow-y: auto; max-height: 400px;">
                 <!-- HEADER -->
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="text-success fw-bold" style="font-size:15px">Monthly Request Trend</span>
+                    <span class="text-success fw-bold" style="font-size:15px">Monthly Requests by Department</span>
                     <div class="d-flex align-items-center justify-content-center rounded-2" style="width:34px;height:34px;background:#E1F5EE">
                         <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                             <path d="M2 13h12M4 13V8m4 5V5m4 8V2" stroke="#0F6E56" stroke-width="1.5" stroke-linecap="round"/>
                         </svg>
                     </div>
                 </div>
-                <canvas id="monthlyTrendChart" height="100"></canvas>
+                <div class="flex-grow-1" style="min-height: 250px;">
+                    <canvas id="deptTrendChart"></canvas>
+                </div>
             </div>
         </div>
 
@@ -406,45 +449,47 @@
     <!-- ===== CHART.JS ===== -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        const ctx = document.getElementById('monthlyTrendChart').getContext('2d');
-        const monthlyTrendChart = new Chart(ctx, {
+        const ctx = document.getElementById('deptTrendChart').getContext('2d');
+        
+        // Format labels from YYYY-MM to Month Name
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const labels = <?php echo json_encode($months); ?>.map(m => {
+            const [year, month] = m.split('-');
+            return monthNames[parseInt(month) - 1] + ' ' + year;
+        });
+
+        const deptTrendChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: <?php echo json_encode($trendLabels); ?>,
-                datasets: [{
-                    label: 'Requests',
-                    data: <?php echo json_encode($trendTotals); ?>,
-                    backgroundColor: '#198754',
-                    borderColor: '#146c43',
-                    borderWidth: 1,
-                    borderRadius: 5
-                }]
+                labels: labels,
+                datasets: <?php echo json_encode($chartDatasets); ?>
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
-                        display: false
+                        position: 'top',
+                        labels: {
+                            boxWidth: 12,
+                            padding: 15,
+                            font: { size: 11 }
+                        }
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
                     }
                 },
                 scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1,
-                            color: '#198754'
-                        },
-                        grid: {
-                            color: 'rgba(25, 135, 84, 0.1)'
-                        }
-                    },
                     x: {
-                        ticks: {
-                            color: '#198754'
-                        },
-                        grid: {
-                            display: false
-                        }
+                        stacked: true,
+                        grid: { display: false }
+                    },
+                    y: {
+                        stacked: true,
+                        beginAtZero: true,
+                        ticks: { stepSize: 5 }
                     }
                 }
             }

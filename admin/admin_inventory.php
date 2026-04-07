@@ -131,15 +131,60 @@ if (isset($_GET['export'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_item'])) {
 
     $stmt = $conn->prepare("
-        INSERT INTO items (supplier_name, item_name, category, stock)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO items (supplier_name, item_name, category, stock, low_stock_threshold)
+        VALUES (?, ?, ?, ?, ?)
     ");
-    $stmt->bind_param("sssi",
+    $stmt->bind_param("sssii",
         $_POST['supplier'],
         $_POST['item_name'],
         $_POST['category'],
-        $_POST['quantity']
+        $_POST['quantity'],
+        $_POST['threshold']
     );
+    $stmt->execute();
+    $stmt->close();
+
+    header("Location: admin_inventory.php");
+    exit();
+}
+
+// ================= UPDATE ITEM =================
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_item'])) {
+    $item_id = intval($_POST['item_id']);
+    $item_name = $_POST['item_name'];
+    $category = $_POST['category'];
+    $supplier = $_POST['supplier'];
+    $stock = intval($_POST['stock']);
+    $threshold = intval($_POST['threshold']);
+    $status = intval($_POST['status']);
+
+    $stmt = $conn->prepare("
+        UPDATE items 
+        SET item_name=?, category=?, supplier_name=?, stock=?, low_stock_threshold=?, is_active=? 
+        WHERE item_id=?
+    ");
+    $stmt->bind_param("sssiiii", $item_name, $category, $supplier, $stock, $threshold, $status, $item_id);
+    $stmt->execute();
+    $stmt->close();
+
+    // Log the update
+    $log = $conn->prepare("INSERT INTO logs (user_id, action, remarks) VALUES (?, 'Item Updated', ?)");
+    $remarks = "Updated item: $item_name (ID: $item_id)";
+    $log->bind_param("is", $admin_id, $remarks);
+    $log->execute();
+    $log->close();
+
+    header("Location: admin_inventory.php");
+    exit();
+}
+
+// ================= DELETE ITEM =================
+if (isset($_GET['delete'])) {
+    $id = intval($_GET['delete']);
+
+    // Only allow delete if item is inactive (safety)
+    $stmt = $conn->prepare("DELETE FROM items WHERE item_id=? AND is_active=0");
+    $stmt->bind_param("i", $id);
     $stmt->execute();
     $stmt->close();
 
@@ -223,20 +268,23 @@ $items = $stmt->get_result();
         </div>
     </div>
 <form method="POST" class="row g-3 align-items-center">
-<div class="col-md-3">
+<div class="col-md-2">
 <input type="text" name="item_name" class="form-control" placeholder="Item Name" required>
 </div>
-<div class="col-md-3">
+<div class="col-md-2">
 <input type="text" name="category" class="form-control" placeholder="Category" required>
 </div>
-<div class="col-md-3">
+<div class="col-md-2">
 <input type="text" name="supplier" class="form-control" placeholder="Supplier" required>
 </div>
 <div class="col-md-2">
-<input type="number" name="quantity" class="form-control" placeholder="Initial Stock" required>
+<input type="number" name="quantity" class="form-control" placeholder="Stock" required>
 </div>
-<div class="col-md-1">
-<button type="submit" name="add_item" class="btn btn-success w-100">Add</button>
+<div class="col-md-2">
+<input type="number" name="threshold" class="form-control" placeholder="Threshold" required value="5">
+</div>
+<div class="col-md-2">
+<button type="submit" name="add_item" class="btn btn-success w-100">Add Item</button>
 </div>
 </form>
 </div>
@@ -341,6 +389,18 @@ while($cat = $catRes->fetch_assoc()) {
 <td>
 
 <?php if ($item['is_active'] == 1): ?>
+<button class="btn btn-sm btn-primary edit-btn" 
+        data-bs-toggle="modal" 
+        data-bs-target="#editItemModal"
+        data-id="<?php echo $item['item_id']; ?>"
+        data-name="<?php echo htmlspecialchars($item['item_name']); ?>"
+        data-category="<?php echo htmlspecialchars($item['category']); ?>"
+        data-supplier="<?php echo htmlspecialchars($item['supplier_name']); ?>"
+        data-stock="<?php echo $item['stock']; ?>"
+        data-threshold="<?php echo $item['low_stock_threshold']; ?>"
+        data-status="<?php echo $item['is_active']; ?>">
+   Edit
+</button>
 <a href="?deactivate=<?php echo $item['item_id']; ?>" 
    class="btn btn-sm btn-warning"
    onclick="return confirm('Deactivate this item?')">
@@ -351,6 +411,11 @@ while($cat = $catRes->fetch_assoc()) {
    class="btn btn-sm btn-success"
    onclick="return confirm('Activate this item?')">
    Activate
+</a>
+<a href="?delete=<?php echo $item['item_id']; ?>" 
+   class="btn btn-sm btn-danger"
+   onclick="return confirm('Are you sure you want to PERMANENTLY DELETE this item? This action cannot be undone.')">
+   Delete
 </a>
 <?php endif; ?>
 
@@ -394,3 +459,70 @@ while($cat = $catRes->fetch_assoc()) {
 
 </main>
 </div>
+
+<!-- EDIT ITEM MODAL -->
+<div class="modal fade" id="editItemModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="border-radius:12px;">
+      <div class="modal-header">
+        <h5 class="modal-title text-success fw-bold">Edit Item</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="POST">
+        <div class="modal-body">
+          <input type="hidden" name="item_id" id="edit_item_id">
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Item Name</label>
+            <input type="text" name="item_name" id="edit_item_name" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Category</label>
+            <input type="text" name="category" id="edit_category" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label small fw-bold">Supplier</label>
+            <input type="text" name="supplier" id="edit_supplier" class="form-control" required>
+          </div>
+          <div class="row">
+            <div class="col-md-4 mb-3">
+              <label class="form-label small fw-bold">Stock</label>
+              <input type="number" name="stock" id="edit_stock" class="form-control" required>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label small fw-bold">Threshold</label>
+              <input type="number" name="threshold" id="edit_threshold" class="form-control" required>
+            </div>
+            <div class="col-md-4 mb-3">
+              <label class="form-label small fw-bold">Status</label>
+              <select name="status" id="edit_status" class="form-select">
+                <option value="1">Active</option>
+                <option value="0">Inactive</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" name="update_item" class="btn btn-success">Update Item</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const editBtns = document.querySelectorAll('.edit-btn');
+    editBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.getElementById('edit_item_id').value = this.dataset.id;
+            document.getElementById('edit_item_name').value = this.dataset.name;
+            document.getElementById('edit_category').value = this.dataset.category;
+            document.getElementById('edit_supplier').value = this.dataset.supplier;
+            document.getElementById('edit_stock').value = this.dataset.stock;
+            document.getElementById('edit_threshold').value = this.dataset.threshold;
+            document.getElementById('edit_status').value = this.dataset.status;
+        });
+    });
+});
+</script>

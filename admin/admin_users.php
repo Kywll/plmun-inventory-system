@@ -298,7 +298,7 @@ $recent_users = $conn->query("SELECT COUNT(*) as total FROM users WHERE date_cre
 <select name="department" class="form-select">
 <option value="">Department</option>
 <?php
-$deptRes = $conn->query("SELECT DISTINCT department FROM users");
+$deptRes = $conn->query("SELECT DISTINCT department FROM users WHERE department IS NOT NULL AND department != '' ORDER BY department ASC");
 while($dept = $deptRes->fetch_assoc()) {
     $selected = ($deptFilter == $dept['department']) ? 'selected' : '';
     echo "<option value='".htmlspecialchars($dept['department'])."' $selected>".htmlspecialchars($dept['department'])."</option>";

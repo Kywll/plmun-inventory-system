@@ -21,6 +21,13 @@ $startDate = $_GET['start_date'] ?? '';
 $endDate = $_GET['end_date'] ?? '';
 $department = $_GET['department'] ?? '';
 
+// Fetch unique departments for the dropdown
+$deptsResult = $conn->query("SELECT DISTINCT department FROM users WHERE department IS NOT NULL AND department != '' ORDER BY department ASC");
+$departments = [];
+while ($row = $deptsResult->fetch_assoc()) {
+    $departments[] = $row['department'];
+}
+
 // ================= EXPORT CSV =================
 if (isset($_GET['export']) && $_GET['export'] === 'csv') {
 
@@ -431,7 +438,14 @@ $result = $stmt->get_result();
 <input type="date" name="end_date" value="<?php echo $endDate; ?>" class="form-control mb-2">
 </div>
 <div class="col-md-4">
-<input type="text" name="department" placeholder="Department" value="<?php echo $department; ?>" class="form-control mb-2">
+<select name="department" class="form-select mb-2">
+<option value="">Department</option>
+<?php foreach ($departments as $dept): ?>
+<option value="<?php echo htmlspecialchars($dept); ?>" <?php if($department == $dept) echo 'selected'; ?>>
+    <?php echo htmlspecialchars($dept); ?>
+</option>
+<?php endforeach; ?>
+</select>
 </div>
 </div>
 <button class="btn btn-success w-100 mt-2">Apply Filter</button>

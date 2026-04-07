@@ -135,6 +135,13 @@ $statusFilter = $_GET['status'] ?? '';
 $departmentFilter = $_GET['department'] ?? '';
 $dateFilter = $_GET['date'] ?? '';
 
+// Fetch unique departments for the dropdown
+$deptsResult = $conn->query("SELECT DISTINCT department FROM users WHERE department IS NOT NULL AND department != '' ORDER BY department ASC");
+$departments = [];
+while ($row = $deptsResult->fetch_assoc()) {
+    $departments[] = $row['department'];
+}
+
 $query = "
 SELECT 
     request_items.request_item_id,
@@ -143,7 +150,7 @@ SELECT
     users.department,
     items.item_name,
     request_items.quantity,
-    requests.status,
+    requests.status as request_status,
     request_items.status as item_status,
     requests.request_date,
     items.stock
@@ -194,6 +201,13 @@ $result = $stmt->get_result();
 <main class="flex-grow-1 p-4" style="margin-left: 250px; height: 100vh; overflow-y: auto;">
 <h2 class="mb-4 text-success fw-bold">Request Management</h2>
 
+<?php 
+if(isset($_SESSION['msg'])) {
+    echo $_SESSION['msg'];
+    unset($_SESSION['msg']);
+}
+?>
+
 <div class="container mb-4">
 <div class="card border-1 shadow-sm p-3" style="border-radius:12px;">
     <!-- HEADER -->
@@ -212,11 +226,19 @@ $result = $stmt->get_result();
 <option value="">Status</option>
 <option value="Pending" <?php if($statusFilter == 'Pending') echo 'selected'; ?>>Pending</option>
 <option value="Approved" <?php if($statusFilter == 'Approved') echo 'selected'; ?>>Approved</option>
+<option value="Completed" <?php if($statusFilter == 'Completed') echo 'selected'; ?>>Completed</option>
 <option value="Declined" <?php if($statusFilter == 'Declined') echo 'selected'; ?>>Declined</option>
 </select>
 </div>
 <div class="col-md-3">
-<input type="text" name="department" class="form-control" placeholder="Department" value="<?php echo htmlspecialchars($departmentFilter); ?>">
+<select name="department" class="form-select">
+<option value="">Department</option>
+<?php foreach ($departments as $dept): ?>
+<option value="<?php echo htmlspecialchars($dept); ?>" <?php if($departmentFilter == $dept) echo 'selected'; ?>>
+    <?php echo htmlspecialchars($dept); ?>
+</option>
+<?php endforeach; ?>
+</select>
 </div>
 <div class="col-md-3">
 <input type="date" name="date" class="form-control" value="<?php echo htmlspecialchars($dateFilter); ?>">
@@ -269,11 +291,15 @@ while ($row = $result->fetch_assoc()):
 <td><?php echo htmlspecialchars($row['department']); ?></td>
 
 <td>
-<?php if ($row['status'] === 'Pending'): ?>
+<?php 
+$status = $row['request_status'];
+if ($status === 'Pending'): ?>
 <span class="badge bg-warning text-dark">Pending</span>
-<?php elseif ($row['status'] === 'Approved'): ?>
+<?php elseif ($status === 'Approved'): ?>
 <span class="badge bg-success">Approved</span>
-<?php elseif ($row['status'] === 'Declined'): ?>
+<?php elseif ($status === 'Completed'): ?>
+<span class="badge bg-primary">Completed</span>
+<?php elseif ($status === 'Declined'): ?>
 <span class="badge bg-danger">Declined</span>
 <?php endif; ?>
 </td>
@@ -287,9 +313,13 @@ while ($row = $result->fetch_assoc()):
 </td>
 
 <td>
-<?php if ($row['status'] === 'Pending'): ?>
+<?php if ($status === 'Pending'): ?>
 <a href="?approve=<?php echo $row['request_item_id']; ?>" class="btn btn-sm btn-success">Approve</a>
 <a href="?decline=<?php echo $row['request_item_id']; ?>" class="btn btn-sm btn-danger">Decline</a>
+<?php elseif ($status === 'Approved'): ?>
+<span class="text-muted small">Awaiting User Receipt</span>
+<?php elseif ($status === 'Completed'): ?>
+<span class="badge bg-primary">Completed</span>
 <?php else: ?>
 —
 <?php endif; ?>
